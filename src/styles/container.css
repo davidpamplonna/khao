@@ -1,0 +1,6 @@
+.khao-container {
+  width: calc(100% - 48px);
+  max-width: 1900px;
+  margin-left: auto;
+  margin-right: auto;
+}
