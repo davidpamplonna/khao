@@ -35,4 +35,8 @@ export const SocialLinks = [
     label: "Facebook",
     href: "https://www.facebook.com/restobarkhao",
   },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/pt-BR/",
+  },
 ];
