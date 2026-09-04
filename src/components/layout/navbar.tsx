@@ -33,7 +33,7 @@ export function Navbar() {
 
       <div
         className={`
-                fixed inset-0 z-50 overflow-y-auto bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
+                fixed inset-0 z-50 overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
       >
         {/* button fechar */}
@@ -50,7 +50,7 @@ export function Navbar() {
           </button>
         </div>
         {/* conteiner navegacao */}
-        <div className="container  mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col overflow-hidden px-8 py-8 sm:px-12">
+        <div className="container mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col overflow-hidden px-8 py-8 sm:px-12">
           <div className="grid flex-1 grid-cols-1 md:grid-cols-2 md:gap-12">
             <nav className="flex flex-col justify-center gap-8">
               <span className="block text-xs uppercase tracking-[0.4em] text-khao-gold">
