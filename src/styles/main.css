@@ -25,3 +25,8 @@ button {
     background: var(--color-khao-gold);
     color: var(--color-khao-black)
 }
+
+.group:hover .khao-menu-icon {
+  filter: brightness(0) saturate(100%) invert(67%) sepia(13%) saturate(847%)
+    hue-rotate(359deg) brightness(88%) contrast(85%);
+}
