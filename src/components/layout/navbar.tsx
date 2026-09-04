@@ -50,7 +50,7 @@ export function Navbar() {
           </button>
         </div>
         {/* conteiner navegacao */}
-        <div className="container flex min-h-[calc(100dvh-100px)] w-full flex-col overflow-hidden px-8 py-8 sm:px-12">
+        <div className="container  mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col overflow-hidden px-8 py-8 sm:px-12">
           <div className="grid flex-1 grid-cols-1 md:grid-cols-2 md:gap-12">
             <nav className="flex flex-col justify-center gap-8">
               <span className="block text-xs uppercase tracking-[0.4em] text-khao-gold">
@@ -78,7 +78,9 @@ export function Navbar() {
             {/* info */}
             <div className="mt-10 flex flex-col justify-center md:items-end">
               <div className="max-w-sm">
-                <span className="block mb-2 md:mb-6 text-sm uppercase tracking-[0.4rem] text-khao-gold">KHAO</span>
+                <span className="block mb-2 md:mb-6 text-sm uppercase tracking-[0.4rem] text-khao-gold">
+                  KHAO
+                </span>
                 <p className="text-md font-light leading-relaxed  md:text-2xl">
                   Uma experiência gastronômica
                   <br />
@@ -93,39 +95,48 @@ export function Navbar() {
           <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-khao-white/10">
             {/* horários */}
             <div>
-                <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">Horários</span>
-                <p className="text-sm leading-relaxed text-khao-white/70">
-                       Ter — Qui
+              <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">
+                Horários
+              </span>
+              <p className="text-sm leading-relaxed text-khao-white/70">
+                Ter — Qui
                 <br />
                 12:00 — 23:00
-                </p>
+              </p>
 
-                <p className="text-sm leading-relaxed text-khao-white/70">
-                    Sex — Sáb
+              <p className="text-sm leading-relaxed text-khao-white/70">
+                Sex — Sáb
                 <br />
                 12:00 — 00:00
-                </p>
+              </p>
             </div>
             {/* localização */}
             <div>
-                <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">Localização</span>
-            <p className="text-sm leading-relaxed text-khao-white/70">
-                  Av. Exemplo, 123
+              <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">
+                Localização
+              </span>
+              <p className="text-sm leading-relaxed text-khao-white/70">
+                Av. Exemplo, 123
                 <br />
                 São Paulo — SP
-            </p>
+              </p>
             </div>
-                {/* redes sociais */}
+            {/* redes sociais */}
             <div className="md:text-right">
-                  <span className="text-xs mt-1 block uppercase tracking-[0.3rem] text-khao-gold">Siga o khao</span>
-                {SocialLinks.map((link) => (
-                    <Link key={link.href} href={link.href} 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mr-5 md:block gap-3 text-sm leading-relaxed text-khao-white/70 hover:text-khao-gold transition-all duration-500 hover:-translate-x-3">
-                        {link.label}
-                    </Link>
-                ))}
+              <span className="text-xs mt-1 block uppercase tracking-[0.3rem] text-khao-gold">
+                Siga o khao
+              </span>
+              {SocialLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mr-5 md:block gap-3 text-sm leading-relaxed text-khao-white/70 hover:text-khao-gold transition-all duration-500 hover:-translate-x-3"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
