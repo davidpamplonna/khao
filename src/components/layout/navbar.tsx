@@ -33,7 +33,7 @@ export function Navbar() {
 
       <div
         className={`
-                fixed inset-0 z-50 overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
+                fixed inset-0 z-50 overflow-y-auto md:overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
       >
         {/* button fechar */}
