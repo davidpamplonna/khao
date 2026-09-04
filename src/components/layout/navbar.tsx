@@ -116,13 +116,13 @@ export function Navbar() {
             </p>
             </div>
                 {/* redes sociais */}
-            <div className="md:text-right flex flex-col">
-                <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">Siga o khao</span>
+            <div className="md:text-right">
+                  <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">Siga o khao</span>
                 {SocialLinks.map((link) => (
                     <Link key={link.href} href={link.href} 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm leading-relaxed text-khao-white/70 hover:text-khao-gold transition-all duration-300 hover:-translate-x-3">
+                    className="block text-sm leading-relaxed text-khao-white/70 hover:text-khao-gold transition-all duration-500 hover:-translate-x-3">
                         {link.label}
                     </Link>
                 ))}

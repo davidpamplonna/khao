@@ -31,7 +31,7 @@ export function Button({
   };
   const current = variants[variant];
   const classes = [
-    "group relative inline-flex",
+    "group relative inline-flex max-w-full",
     "min-h-12 w-full sm:w-auto sm:min-w-52",
     "items-center justify-center",
     "border bg-transparent px-7 py-4",
@@ -59,8 +59,8 @@ export function Button({
       {/* Content */}{" "}
       <span
         className={[
-          "relative z-10 flex w-full items-center justify-center gap-5",
-          "whitespace-nowrap transition-colors duration-500",
+          "relative z-10 flex w-full items-center justify-center gap-3",
+          "text-center leading-tight transition-colors duration-500 sm:gap-5",
           current.text,
         ].join(" ")}
       >
