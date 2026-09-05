@@ -3,12 +3,24 @@ import { ICONS, LOGO_IMG } from "@/src/types/images";
 import Image from "next/image";
 import { NavLinks, SocialLinks } from "@/src/types/menu";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Link from "next/link";
 
 export function Navbar() {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false); 
+
+  useEffect(() => {
+    if(isOpenMenu) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpenMenu])
 
   return (
     <>
