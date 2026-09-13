@@ -1,0 +1,18 @@
+
+@layer components {
+  .khao-title {
+    font-family: var(--font-khao-title);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: clamp(2.25rem, 4vw, 4rem);
+  }
+
+  .khao-description {
+    font-family: var(--font-khao-description);
+    font-weight: 400;
+    font-size: clamp(0.44rem, 4vw, 1rem);
+    line-height: 1.65;
+    letter-spacing: 0.040em;
+  }
+}

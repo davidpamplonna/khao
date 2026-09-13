@@ -1,2 +1,29 @@
 @import "tailwindcss";
+@import "./variables.css";
+@import "./tipografia.css";
 
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-khao-bg);
+    color: var(--color-khao-white);
+    font-family: var(--font-khao-description);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background-color: var(--color-khao-gold);
+    color: var(--color-khao-black);
+  }
+}

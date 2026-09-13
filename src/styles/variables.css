@@ -1,0 +1,13 @@
+@theme {
+  /* colors */
+  --color-khao-bg: #0a0a09;
+  --color-khao-black: #0a0a09;
+  --color-khao-white: #ffffff;
+  --color-khao-description: #f8f7f6;
+  --color-khao-gold: #c79a5b;
+
+  /* Fonts */
+  --font-khao-title: var(--font-cormorant-garamond);
+  --font-khao-description: var(--font-manrope);
+}
+
