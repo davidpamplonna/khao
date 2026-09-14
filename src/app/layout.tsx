@@ -6,12 +6,14 @@ const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-manrope",
+  weight: ["400", "500"],
 });
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-cormorant-garamond",
+  weight: ["700"],
 });
 
 export const metadata: Metadata = {

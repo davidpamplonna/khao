@@ -2,7 +2,7 @@
 @layer components {
   .khao-title {
     font-family: var(--font-khao-title);
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: clamp(2.25rem, 4vw, 4rem);
