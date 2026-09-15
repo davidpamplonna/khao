@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import { Logo } from "../ui/logo";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { setScrollLocked } from "@/src/motion/scroll-lock";
 
 export function NavBar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -16,19 +17,17 @@ export function NavBar() {
     () => true,
     () => false,
   );
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
 
-
-    useEffect(() => {
-    if(isOpenMenu) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = isOpenMenu ? "hidden" : previousOverflow;
+    setScrollLocked(isOpenMenu);
 
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpenMenu])
+      document.body.style.overflow = previousOverflow;
+      setScrollLocked(false);
+    };
+  }, [isOpenMenu]);
 
   return (
     <>
@@ -52,7 +51,7 @@ export function NavBar() {
         createPortal(
           <div
             className={`
-            fixed inset-0 z-[60] overflow-y-auto md:overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
+            fixed inset-0 z-60 overflow-y-auto md:overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
           >
             {/* buttom close */}
@@ -111,7 +110,7 @@ export function NavBar() {
                 </div>
               </div>
               {/* footer */}
-              <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-khao-white/10">
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-khao-white/10">
                 {/* horarios */}
                 <div>
                   <span className="text-xs uppercase tracking-[0.3rem] text-khao-gold">
