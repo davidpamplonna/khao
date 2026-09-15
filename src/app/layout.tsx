@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "@/src/styles/main.css";
+import SmoothScroll from "../motion/SmoothScroll";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -22,15 +23,15 @@ export const metadata: Metadata = {
     "A essência da Tailândia, transformada em uma experiência contemporânea.",
 };
 
-export default function RootLayout({
-  children,
-}: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
       className={`${manrope.variable} ${cormorantGaramond.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }
