@@ -29,3 +29,8 @@ export const KHAO_STORY_ICON = {
     khao_elefant: '/assets/icons/khao-elefant.svg',
     khao_lotus: '/assets/icons/khao-lotus.svg',
 }
+
+
+export const KHAO_EXPERIENCE = {
+    khao_ornament: "/assets/experience/ornament_top.webp"
+}

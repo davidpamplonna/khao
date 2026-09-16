@@ -290,7 +290,7 @@ export function Hero() {
       {/* arrow */}
       <div
         ref={scrollRef}
-        className="absolute bottom-17 md:left-1/2 md:translate-x-1/2 z-10 flex  flex-col items-center gap-3"
+        className="absolute bottom-17 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center  gap-3"
       >
         <span className="text-[7px] uppercase tracking-[0.45em] text-khao-white/50">
           scroll
