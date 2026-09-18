@@ -1,7 +1,7 @@
 "use client";
 
-import { NavLinks, SocialLinks } from "@/src/data/menu";
-import { KHAO_Menu } from "@/src/data/image";
+import { NavLinks, SocialLinks } from "@/src/data/assets/menu";
+import { KHAO_Menu } from "@/src/data/assets/image";
 import Image from "next/image";
 import { useState, useSyncExternalStore, useEffect } from "react";
 import { createPortal } from "react-dom";

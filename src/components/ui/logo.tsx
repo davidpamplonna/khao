@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { KHAO_LOGO } from "@/src/data/image";
+import { KHAO_LOGO } from "@/src/data/assets/image";
 
 export function Logo() {
   return (

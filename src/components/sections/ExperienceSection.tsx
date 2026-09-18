@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 
-import { KHAO_EXPERIENCE } from "@/src/data/image";
-import { KHAO_EXPERIENCE_CLIP } from "@/src/data/video";
+import { KHAO_EXPERIENCE } from "@/src/data/assets/image";
+import { KHAO_EXPERIENCE_CLIP } from "@/src/data/assets/video";
 import { gsap } from "@/src/lib/gsap";
 
 import { Title } from "../ui/title";
@@ -118,9 +118,9 @@ export function ExperienceSection() {
           });
 
           /*
-           * 
+           *
            * VIDEO EXPANSION
-           * 
+           *
            *
            * Desktop:
            *
@@ -216,7 +216,6 @@ export function ExperienceSection() {
           id="experience-title"
           data-experience-title
           className="
-            pointer-events-none
             absolute
             left-1/2
             top-[8%]

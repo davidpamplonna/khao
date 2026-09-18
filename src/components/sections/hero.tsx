@@ -1,7 +1,7 @@
 "use client";
 
-import { KHAO_VIDEO } from "@/src/data/video";
-import { KHAO_HERO } from "@/src/data/image";
+import { KHAO_VIDEO } from "@/src/data/assets/video";
+import { KHAO_HERO } from "@/src/data/assets/image";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { ArrowDown } from "lucide-react";
