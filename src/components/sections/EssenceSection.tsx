@@ -1,111 +1,194 @@
 "use client";
 import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
-import { KHAO_STORY_ICON, STORY_IMG } from "@/src/data/image";
+import { KHAO_STORY_ICON, ESSENCE_IMG } from "@/src/data/assets/image";
 import { gsap } from "@/src/lib/gsap";
 import { Title } from "../ui/title";
 
 export function EssenceSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (
-      !section ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-    const context = gsap.context(() => {
+ useLayoutEffect(() => {
+  const section = sectionRef.current;
+
+  if (!section) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const context = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 769px)", () => {
+      // ==========================================
+      // HEADER
+      // ==========================================
+
       const headerItems = gsap.utils.toArray<HTMLElement>(
         "[data-essence-header]",
       );
-      gsap.fromTo(
-        headerItems,
-        { autoAlpha: 0, y: 32 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 80%", once: true },
-        },
+
+      if (headerItems.length) {
+        gsap.fromTo(
+          headerItems,
+          {
+            autoAlpha: 0,
+            y: 32,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
+      }
+
+      // ==========================================
+      // IMAGE REVEALS
+      // ==========================================
+
+      const revealContainers = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-reveal]",
       );
-      gsap.utils
-        .toArray<HTMLElement>("[data-essence-reveal]")
-        .forEach((container) => {
-          const image = container.querySelector<HTMLElement>(
-            "[data-essence-image]",
-          );
-          if (!image) return;
-          gsap.set(container, { clipPath: "inset(0 0 100% 0)" });
-          gsap.set(image, { scale: 1.12 });
-          const reveal = gsap.timeline({
-            scrollTrigger: { trigger: container, start: "top 75%", once: true },
-          });
-          reveal
-            .to(container, {
-              clipPath: "inset(0 0 0% 0)",
-              duration: 1.35,
-              ease: "power4.inOut",
-            })
-            .to(
-              image,
-              { scale: 1, duration: 1.6, ease: "power2.out" },
-              "-=1.15",
-            );
+
+      revealContainers.forEach((container) => {
+        const image = container.querySelector<HTMLElement>(
+          "[data-essence-image]",
+        );
+
+        if (!image) return;
+
+        gsap.set(container, {
+          clipPath: "inset(0 0 100% 0)",
         });
-      gsap.utils.toArray<HTMLElement>("[data-essence-text]").forEach((text) => {
+
+        gsap.set(image, {
+          scale: 1.12,
+        });
+
+        const reveal = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top 75%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        reveal
+          .to(container, {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.35,
+            ease: "power4.inOut",
+          })
+          .to(
+            image,
+            {
+              scale: 1,
+              duration: 1.6,
+              ease: "power2.out",
+            },
+            "-=1.15",
+          );
+      });
+
+      // ==========================================
+      // TEXT
+      // ==========================================
+
+      const textElements = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-text]",
+      );
+
+      textElements.forEach((text) => {
         gsap.fromTo(
           text,
-          { autoAlpha: 0, y: 28 },
+          {
+            autoAlpha: 0,
+            y: 28,
+          },
           {
             autoAlpha: 1,
             y: 0,
             duration: 0.9,
             ease: "power3.out",
-            scrollTrigger: { trigger: text, start: "top 88%", once: true },
+            scrollTrigger: {
+              trigger: text,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
           },
         );
       });
-      gsap.utils
-        .toArray<HTMLElement>("[data-essence-ornament]")
-        .forEach((ornament) => {
-          gsap.fromTo(
-            ornament,
-            { autoAlpha: 0, y: 18, scale: 0.92, rotate: 3 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              rotate: 0,
-              duration: 1,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: ornament,
-                start: "top 88%",
-                once: true,
-              },
-            },
-          );
-        });
-      gsap.utils
-        .toArray<HTMLElement>("[data-essence-parallax]")
-        .forEach((element) => {
-          gsap.to(element, {
-            yPercent: -7,
-            ease: "none",
+
+      // ==========================================
+      // ORNAMENTS
+      // ==========================================
+
+      const ornaments = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-ornament]",
+      );
+
+      ornaments.forEach((ornament) => {
+        gsap.fromTo(
+          ornament,
+          {
+            autoAlpha: 0,
+            y: 18,
+            scale: 0.92,
+            rotate: 3,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 1,
+            ease: "power3.out",
             scrollTrigger: {
-              trigger: element,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
+              trigger: ornament,
+              start: "top 88%",
+              toggleActions: "play none none none",
             },
-          });
+          },
+        );
+      });
+
+      // ==========================================
+      // PARALLAX
+      // ==========================================
+
+      const parallaxElements = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-parallax]",
+      );
+
+      parallaxElements.forEach((element) => {
+        gsap.to(element, {
+          yPercent: -7,
+          ease: "none",
+          scrollTrigger: {
+            trigger: element,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
         });
+      });
+
+      // ==========================================
+      // FIRE
+      // ==========================================
+
       const fireImage = section.querySelector<HTMLElement>(
         "[data-essence-fire]",
       );
+
       if (fireImage) {
         gsap.to(fireImage, {
           scale: 1.08,
@@ -119,9 +202,146 @@ export function EssenceSection() {
           },
         });
       }
-    }, section);
-    return () => context.revert();
-  }, []);
+    });
+
+    // ==========================================
+    // MOBILE
+    // ==========================================
+
+    mm.add("(max-width: 768px)", () => {
+      const headerItems = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-header]",
+      );
+
+      if (headerItems.length) {
+        gsap.fromTo(
+          headerItems,
+          {
+            autoAlpha: 0,
+            y: 24,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
+      }
+
+      const revealContainers = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-reveal]",
+      );
+
+      revealContainers.forEach((container) => {
+        const image = container.querySelector<HTMLElement>(
+          "[data-essence-image]",
+        );
+
+        if (!image) return;
+
+        gsap.set(container, {
+          clipPath: "inset(0 0 100% 0)",
+        });
+
+        gsap.set(image, {
+          scale: 1.08,
+        });
+
+        const reveal = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        reveal
+          .to(container, {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.1,
+            ease: "power4.inOut",
+          })
+          .to(
+            image,
+            {
+              scale: 1,
+              duration: 1.3,
+              ease: "power2.out",
+            },
+            "-=0.9",
+          );
+      });
+
+      const textElements = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-text]",
+      );
+
+      textElements.forEach((text) => {
+        gsap.fromTo(
+          text,
+          {
+            autoAlpha: 0,
+            y: 20,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.75,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: text,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
+      });
+
+      const ornaments = gsap.utils.toArray<HTMLElement>(
+        "[data-essence-ornament]",
+      );
+
+      ornaments.forEach((ornament) => {
+        gsap.fromTo(
+          ornament,
+          {
+            autoAlpha: 0,
+            y: 14,
+            scale: 0.94,
+            rotate: 2,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ornament,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
+      });
+
+      // No parallax pesado no mobile.
+    });
+
+  }, section);
+
+  return () => {
+    context.revert();
+  };
+}, []);
 
   return (
     <section
@@ -164,7 +384,7 @@ export function EssenceSection() {
             >
               {" "}
               <Image
-                src={STORY_IMG.chef_preparation}
+                src={ESSENCE_IMG.chef_preparation}
                 alt="Chef preparando ingredientes na cozinha do KHAO"
                 fill
                 priority={false}
@@ -186,7 +406,7 @@ export function EssenceSection() {
             {/* Description */}{" "}
             <p
               data-essence-text
-              className="khao-description mt-14 max-w-80 text-sm text-khao-description sm:text-base md:mt-16"
+              className="khao-description mt-14 max-w-80  text-khao-description  md:mt-16"
             >
               {" "}
               Ingredientes, fogo, técnica e tradição se encontram em uma
@@ -202,7 +422,7 @@ export function EssenceSection() {
               >
                 {" "}
                 <Image
-                  src={STORY_IMG.cocktail_preparation}
+                  src={ESSENCE_IMG.cocktail_preparation}
                   alt="Bartender preparando um coquetel"
                   fill
                   className="object-cover"
@@ -227,7 +447,7 @@ export function EssenceSection() {
             {/* Intro text */}{" "}
             <p
               data-essence-text
-              className="khao-description max-w-64 text-sm text-khao-description sm:text-base md:ml-1"
+              className="khao-description max-w-64  text-khao-description  md:ml-1"
             >
               {" "}
               KHAO nasceu do encontro entre tradição e contemporaneidade.{" "}
@@ -239,7 +459,7 @@ export function EssenceSection() {
             >
               {" "}
               <Image
-                src={STORY_IMG.wok_fire}
+                src={ESSENCE_IMG.wok_fire}
                 alt="Chef finalizando um prato sobre o fogo"
                 fill
                 className="object-cover"
@@ -266,7 +486,7 @@ export function EssenceSection() {
             >
               {" "}
               <Image
-                src={STORY_IMG.dish_finishing}
+                src={ESSENCE_IMG.dish_finishing}
                 alt="Prato finalizado sendo servido"
                 width={640}
                 height={360}
