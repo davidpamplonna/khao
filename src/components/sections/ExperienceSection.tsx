@@ -227,7 +227,7 @@ export function ExperienceSection() {
             md:w-[90%]
           "
         >
-          <Title title="Uma experiência feita para ser" highlight="sentida." />
+          <Title title="Uma experiência feita para ser " highlight="sentida." />
         </div>
 
         {/* VIDEO */}

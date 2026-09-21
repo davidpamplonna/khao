@@ -11,7 +11,7 @@
   .khao-description {
     font-family: var(--font-khao-description);
     font-weight: 400;
-    font-size: clamp(0.44rem, 4vw, 1.3rem);
+    font-size: clamp(0.44rem, 4vw, 1.02rem);
     line-height: 1.65;
     letter-spacing: 0.040em;
   }
