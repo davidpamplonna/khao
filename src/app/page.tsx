@@ -3,6 +3,7 @@ import { Hero } from "../components/sections/hero";
 import { EssenceSection } from "../components/sections/EssenceSection";
 import { ExperienceSection } from "../components/sections/ExperienceSection";
 import { MenuSection } from "../components/sections/MenuSection";
+import { CombosSection } from "../components/sections/CombosSection";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <EssenceSection />
       <ExperienceSection />
       <MenuSection />
+      <CombosSection />
     </main>
   );
 }

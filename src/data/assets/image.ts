@@ -68,3 +68,10 @@ export const KHAO_BRAND = {
     khao_smok: '/assets/brand/khao-smok.png',
     khao_glow: '/assets/brand/khao-glow.png',
 }
+
+// COMBOS
+
+export const KHAO_COMBOS = {
+    assencial: '/assets/combos/combo-assencial.webp',
+    signature: '/assets/combos/combo-signature.webp',
+}
