@@ -75,3 +75,14 @@ export const KHAO_COMBOS = {
     assencial: '/assets/combos/combo-assencial.webp',
     signature: '/assets/combos/combo-signature.webp',
 }
+
+export const KHAO_CTA = {
+    cta: '/assets/cta/cta-khao-aerial.webp'
+}
+
+export const KHAO_gallery = {
+    restaurant_01: '/assets/gallery/gallery-restaurant-01.webp',
+    restaurant_02: '/assets/gallery/gallery-restaurant-02.webp',
+    restaurant_03: '/assets/gallery/gallery-restaurant-03.webp',
+    restaurant_04: '/assets/gallery/gallery-restaurant-04.webp',
+}

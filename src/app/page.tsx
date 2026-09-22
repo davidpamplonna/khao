@@ -4,6 +4,8 @@ import { EssenceSection } from "../components/sections/EssenceSection";
 import { ExperienceSection } from "../components/sections/ExperienceSection";
 import { MenuSection } from "../components/sections/MenuSection";
 import { CombosSection } from "../components/sections/CombosSection";
+import { CtaSection } from "../components/sections/CtaSection";
+import { GallerySection } from "../components/ui/GallerySection";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
       <ExperienceSection />
       <MenuSection />
       <CombosSection />
+      <CtaSection />
+      <GallerySection />
     </main>
   );
 }
