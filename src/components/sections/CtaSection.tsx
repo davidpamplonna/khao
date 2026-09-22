@@ -7,7 +7,7 @@ import { KHAO_CTA } from "@/src/data/assets/image";
 
 import { gsap } from "@/src/lib/gsap";
 
-import { Button } from "../ui/button";
+import { ReservationButton } from "../ui/Form";
 import { Title } from "../ui/title";
 
 export function CtaSection() {
@@ -282,9 +282,9 @@ export function CtaSection() {
 
           {/* Button */}
           <div className="cta-button mt-8 sm:mt-10">
-            <Button variant="secondary" href="#reserva">
+            <ReservationButton variant="secondary">
               Reserve sua mesa
-            </Button>
+            </ReservationButton>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { KHAO_VIDEO } from "@/src/data/assets/video";
 import { KHAO_HERO } from "@/src/data/assets/image";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { ReservationButton } from "../ui/Form";
 import { ArrowDown } from "lucide-react";
 
 import { gsap } from "@/src/lib/gsap";
@@ -282,9 +283,9 @@ export function Hero() {
           <Button type="button" variant="primary" href="#cardapio">
             Explorar o menu
           </Button>
-          <Button type="button" variant="secondary" href="#cardapio">
+          <ReservationButton variant="secondary">
             Reserve uma mesa
-          </Button>
+          </ReservationButton>
         </div>
       </div>
       {/* arrow */}
