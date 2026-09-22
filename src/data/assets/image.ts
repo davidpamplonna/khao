@@ -29,6 +29,12 @@ export const KHAO_STORY_ICON = {
     khao_lotus: '/assets/icons/khao-lotus.svg',
 }
 
+export const KHAO_SOCIAL ={
+    facebook: '/assets/icons/facebook.svg',
+    instagram: '/assets/icons/instagram.svg',
+    tiktok: '/assets/icons/tik-tok.svg',
+}
+
 
 export const KHAO_EXPERIENCE = {
     khao_ornament: "/assets/brand/khao-ornament.webp"
