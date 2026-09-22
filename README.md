@@ -108,4 +108,4 @@ Os vídeos e imagens fazem parte importante da experiência visual, mas aumentam
 
 ## Estado atual
 
-O projeto compila e possui lint configurado. Ainda há ajustes funcionais pendentes, principalmente destinos de navegação, fluxo de reservas, dados reais do restaurante, acessibilidade do menu mobile e lightbox. O documento [ajuste.md](ajuste.md) lista cada pendência, o arquivo responsável e a forma recomendada de implementação.
+O projeto compila e possui lint configurado. O formulário visual de reserva já está integrado ao Hero e à CTA final, com validação nativa e confirmação para o e-mail informado. Ainda é necessário conectar o envio real dessa confirmação a um backend ou serviço de e-mail, além de revisar destinos de navegação, dados reais do restaurante, acessibilidade do menu mobile e lightbox. O documento [ajuste.md](ajuste.md) lista cada pendência, o arquivo responsável e a forma recomendada de implementação.
