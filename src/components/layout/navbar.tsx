@@ -56,7 +56,14 @@ export function NavBar() {
           >
             {/* buttom close */}
             <div className="container mx-auto flex w-full items-center justify-between px-3 py-7 sm:px-10">
-              <Logo />
+              {/* <Logo /> */}
+                <Logo
+            className="
+       h-auto
+          w-40
+          max-md:w-65
+          max-sm:w-30"
+          />
               <button
                 onClick={() => setIsOpenMenu(false)}
                 aria-label="Fechar menu"

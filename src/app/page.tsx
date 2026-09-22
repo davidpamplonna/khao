@@ -6,6 +6,7 @@ import { MenuSection } from "../components/sections/MenuSection";
 import { CombosSection } from "../components/sections/CombosSection";
 import { CtaSection } from "../components/sections/CtaSection";
 import { GallerySection } from "../components/ui/GallerySection";
+import { Footer } from "../components/layout/footer";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <CombosSection />
       <CtaSection />
       <GallerySection />
+      <Footer/>
     </main>
   );
 }
