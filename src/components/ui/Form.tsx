@@ -69,6 +69,7 @@ export function ReservationButton({
 
 export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousBodyOverflowRef = useRef("");
   const isMounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -80,7 +81,7 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
   useEffect(() => {
     if (!isOpen || !isMounted) return;
 
-    const previousOverflow = document.body.style.overflow;
+    previousBodyOverflowRef.current = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     setScrollLocked(true);
     closeButtonRef.current?.focus();
@@ -92,7 +93,7 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflowRef.current;
       setScrollLocked(false);
       document.removeEventListener("keydown", handleKeyDown);
     };
@@ -117,14 +118,14 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[70] overflow-y-auto bg-khao-black/80 px-4 py-6 backdrop-blur-md sm:px-6 sm:py-10"
+      className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 px-4 py-6 backdrop-blur-md sm:px-6 sm:py-10"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) handleClose();
       }}
     >
       <div
-        className="relative mx-auto w-full max-w-3xl border border-khao-white/15 bg-khao-bg shadow-[0_25px_100px_rgba(0,0,0,0.55)]"
+        className="relative mx-auto max-h-[calc(100dvh-3rem)] w-full max-w-3xl overflow-y-auto overscroll-contain touch-pan-y border border-khao-white/15 bg-khao-bg shadow-[0_25px_100px_rgba(0,0,0,0.55)] sm:max-h-[calc(100dvh-5rem)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="reservation-title"
