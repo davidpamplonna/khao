@@ -40,7 +40,7 @@ export const metadata: Metadata = {
       "A essência da Tailândia, transformada em uma experiência contemporânea.",
     images: [
       {
-        url: "/assets/cta/cta-khao-aerial.opt.webp",
+        url: "/assets/hero/hero-khao-chef.opt.webp",
         width: 1512,
         height: 915,
         alt: "Experiência gastronômica do Restobar KHAO",
