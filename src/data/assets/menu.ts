@@ -7,22 +7,22 @@ export const NavLinks = [
   {
     number: "02",
     label: "Cardápio",
-    href: "/#cardapio",
+    href: "#cardapio",
   },
   {
     number: "03",
     label: "A Experiência",
-    href: "/#experiencia",
+    href: "#experiencia",
   },
   {
     number: "04",
     label: "O Restaurante",
-    href: "/#cardapio",
+    href: "#restaurante",
   },
   {
     number: "05",
     label: "Reservas",
-    href: "/#reservas",
+    href: "#reserva",
   },
 ]
 

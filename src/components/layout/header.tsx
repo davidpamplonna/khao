@@ -20,7 +20,7 @@ export function Header() {
     return () => {
       window.removeEventListener("scroll", handledScroll);
     };
-  });
+  }, []);
 
   return (
     <header

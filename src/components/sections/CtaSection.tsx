@@ -6,17 +6,21 @@ import { useLayoutEffect, useRef } from "react";
 import { KHAO_CTA } from "@/src/data/assets/image";
 
 import { gsap } from "@/src/lib/gsap";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 
 import { ReservationButton } from "../ui/Form";
 import { Title } from "../ui/title";
 
 export function CtaSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
 
     if (!section) return;
+
+    if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
       const imageWrapper = section.querySelector(".cta-image-wrapper");
@@ -102,7 +106,7 @@ export function CtaSection() {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
@@ -149,7 +153,7 @@ export function CtaSection() {
             src={KHAO_CTA.cta}
             alt="Prato da cozinha tailandesa contemporânea do KHAO"
             fill
-            sizes="100vw"
+            sizes="(max-width: 1400px) 100vw, 1400px"
             className="
               cta-image
               object-cover
@@ -233,6 +237,7 @@ export function CtaSection() {
 
       {/* Content */}
       <div
+        id="reserva"
         className="
           relative
           z-20

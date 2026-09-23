@@ -8,6 +8,7 @@ import { ReservationButton } from "../ui/Form";
 import { ArrowDown } from "lucide-react";
 
 import { gsap } from "@/src/lib/gsap";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 import { useRef, useEffect } from "react";
 
 export function Hero() {
@@ -20,16 +21,13 @@ export function Hero() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const hero = heroRef.current;
 
     if (!hero) return;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (reduceMotion) {
+    if (reducedMotion) {
       gsap.set(
         [
           overlayRef.current,
@@ -210,7 +208,7 @@ export function Hero() {
     }, hero);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
@@ -221,7 +219,7 @@ export function Hero() {
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
+        autoPlay={!reducedMotion}
         loop
         muted
         playsInline
@@ -299,7 +297,11 @@ export function Hero() {
         <ArrowDown
           size={14}
           strokeWidth={1}
-          className="animate-bounce text-khao-white/70"
+          className={
+            reducedMotion
+              ? "text-khao-white/70"
+              : "animate-bounce text-khao-white/70"
+          }
         />
       </div>
     </section>
