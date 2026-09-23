@@ -167,7 +167,7 @@ export function CombosSection() {
                     src={combo.image}
                     alt={combo.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, 1200px"
+                    sizes="(max-width: 768px) 100vw, 1400px"
                     className="object-cover will-change-transform"
                     data-combos-image
                   />

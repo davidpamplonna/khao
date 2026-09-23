@@ -6,6 +6,7 @@ import { useLayoutEffect, useRef } from "react";
 import { KHAO_EXPERIENCE } from "@/src/data/assets/image";
 import { KHAO_EXPERIENCE_CLIP } from "@/src/data/assets/video";
 import { gsap } from "@/src/lib/gsap";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 
 import { Title } from "../ui/title";
 
@@ -13,6 +14,7 @@ export function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoWrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -23,7 +25,7 @@ export function ExperienceSection() {
       return;
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reducedMotion) {
       return;
     }
 
@@ -179,10 +181,11 @@ export function ExperienceSection() {
     return () => {
       context.revert();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
+      id="experiencia"
       ref={sectionRef}
       className="relative h-dvh min-h-screen overflow-hidden bg-khao-bg"
       aria-labelledby="experience-title"
@@ -253,11 +256,12 @@ export function ExperienceSection() {
               object-cover
               will-change-transform
             "
-            autoPlay
+            autoPlay={!reducedMotion}
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="none"
+            poster={KHAO_EXPERIENCE.poster}
             aria-hidden="true"
           >
             <source src={KHAO_EXPERIENCE_CLIP} type="video/mp4" />

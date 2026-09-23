@@ -93,7 +93,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
 
   {
     id: "desserts",
-    number: "04",
+    number: "03",
     label: "SOBREMESAS",
     dishes: [
       {

@@ -232,7 +232,7 @@ export function MenuSection() {
     >
       {/* ORNAMENT TOP*/}
       <Image
-        src={KHAO_ORNAMENT.khao_ligth}
+        src={KHAO_ORNAMENT.khao_light}
         width={530}
         height={530}
         alt="Decoração"
@@ -338,7 +338,7 @@ export function MenuSection() {
                 height={480}
                 priority
                 className="h-full w-full object-contain"
-                sizes="(max-width: 767px) 92vw, 42vw"
+                sizes="(max-width: 767px) 92vw, 480px"
               />
             </div>
             <div

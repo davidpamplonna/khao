@@ -4,11 +4,14 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
+import { X } from "lucide-react";
 
 import "swiper/css";
 
 import { KHAO_gallery } from "@/src/data/assets/image";
 import { gsap } from "@/src/lib/gsap";
+import { setScrollLocked } from "@/src/motion/scroll-lock";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 
 const galleryItems = [
   {
@@ -30,9 +33,36 @@ const galleryItems = [
 ];
 
 export function GallerySection() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<
+    (typeof galleryItems)[number] | null
+  >(null);
 
   const sectionRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
+  const reducedMotion = useReducedMotion();
+
+  useLayoutEffect(() => {
+    if (!selectedImage) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedImage(null);
+    };
+
+    document.body.style.overflow = "hidden";
+    setScrollLocked(true);
+    closeButtonRef.current?.focus();
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      setScrollLocked(false);
+
+      if (openerRef.current?.isConnected) openerRef.current.focus();
+    };
+  }, [selectedImage]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -43,7 +73,11 @@ export function GallerySection() {
       const swiper = section.querySelector(".gallery-swiper");
       const slides = section.querySelectorAll(".gallery-slide");
 
-      // Estado inicial
+      if (reducedMotion) {
+        gsap.set([swiper, slides], { opacity: 1, scale: 1, y: 0 });
+        return;
+      }
+
       gsap.set(swiper, {
         opacity: 0,
         scale: 1.04,
@@ -78,16 +112,17 @@ export function GallerySection() {
           ease: "power3.out",
           stagger: 0.12,
         },
-        "-=0.9"
+        "-=0.9",
       );
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <>
       <section
+        id="restaurante"
         ref={sectionRef}
         className="bg-khao-bg pb-24 pt-2 md:pb-32"
       >
@@ -99,10 +134,14 @@ export function GallerySection() {
             loop={true}
             speed={1800}
             spaceBetween={8}
-            autoplay={{
-              delay: 2800,
-              disableOnInteraction: false,
-            }}
+            autoplay={
+              reducedMotion
+                ? false
+                : {
+                    delay: 2800,
+                    disableOnInteraction: false,
+                  }
+            }
             breakpoints={{
               0: { slidesPerView: 1.2 },
               640: { slidesPerView: 2.2 },
@@ -110,14 +149,17 @@ export function GallerySection() {
             }}
             className="gallery-swiper"
           >
-            {galleryItems.concat(galleryItems).map((item, index) => (
+            {galleryItems.map((item, index) => (
               <SwiperSlide
                 key={`${item.src}-${index}`}
                 className="gallery-slide h-auto!"
               >
                 <button
                   type="button"
-                  onClick={() => setSelectedImage(item.src)}
+                  onClick={(event) => {
+                    openerRef.current = event.currentTarget;
+                    setSelectedImage(item);
+                  }}
                   className="
                     group
                     relative
@@ -172,6 +214,9 @@ export function GallerySection() {
       {/* Lightbox */}
       {selectedImage && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Imagem ampliada: ${selectedImage.alt}`}
           className="
             fixed
             inset-0
@@ -201,6 +246,7 @@ export function GallerySection() {
           >
             <button
               type="button"
+              ref={closeButtonRef}
               onClick={() => setSelectedImage(null)}
               className="
                 absolute
@@ -224,13 +270,13 @@ export function GallerySection() {
               "
               aria-label="Fechar imagem"
             >
-              ×
+              <X size={18} strokeWidth={1.5} aria-hidden="true" />
             </button>
 
             <div className="relative h-[70vh] w-full">
               <Image
-                src={selectedImage}
-                alt="Imagem ampliada"
+                src={selectedImage.src}
+                alt={selectedImage.alt}
                 fill
                 sizes="90vw"
                 className="object-contain"

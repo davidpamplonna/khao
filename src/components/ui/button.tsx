@@ -1,17 +1,31 @@
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+import type {
+  ButtonHTMLAttributes,
+  ComponentPropsWithoutRef,
+  ReactNode,
+} from "react";
+
+type ButtonBaseProps = {
   children: ReactNode;
   variant?: "primary" | "secondary";
-  href?: string;
+  className?: string;
 };
+
+type NativeButtonProps = ButtonBaseProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className">;
+
+type LinkButtonProps = ButtonBaseProps &
+  Omit<ComponentPropsWithoutRef<typeof Link>, "children" | "className"> & {
+    href: ComponentPropsWithoutRef<typeof Link>["href"];
+  };
+
+export type ButtonProps = NativeButtonProps | LinkButtonProps;
+
 export function Button({
   children,
   variant = "primary",
   className = "",
-  type = "button",
-  href,
   ...props
 }: ButtonProps) {
   const variants = {
@@ -85,16 +99,19 @@ export function Button({
       </span>{" "}
     </>
   );
-  if (href) {
+  if ("href" in props) {
     return (
-      <Link href={href} className={classes}>
+      <Link {...props} className={classes}>
         {" "}
         {content}{" "}
       </Link>
     );
   }
+
+  const { type = "button", ...buttonProps } = props;
+
   return (
-    <button type={type} {...props} className={classes}>
+    <button {...buttonProps} type={type} className={classes}>
       {" "}
       {content}{" "}
     </button>

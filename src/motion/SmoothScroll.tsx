@@ -4,18 +4,17 @@ import { ReactNode, useEffect } from "react";
 import Lenis from "lenis";
 import { ScrollTrigger, gsap } from "@/src/lib/gsap";
 import { SCROLL_LOCK_EVENT } from "./scroll-lock";
+import { useReducedMotion } from "./use-reduced-motion";
 
 interface SmoothScrollProps {
   children: ReactNode;
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
-  useEffect(() => {
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+  const reducedMotion = useReducedMotion();
 
-    if (reduceMotion) return;
+  useEffect(() => {
+    if (reducedMotion) return;
 
     const lenis = new Lenis({
       duration: 1.6,
@@ -46,7 +45,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       gsap.ticker.remove(raf);
       lenis.destroy();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return <>{children}</>;
 }

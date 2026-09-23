@@ -3,7 +3,7 @@
 import { NavLinks, SocialLinks } from "@/src/data/assets/menu";
 import { KHAO_Menu } from "@/src/data/assets/image";
 import Image from "next/image";
-import { useState, useSyncExternalStore, useEffect } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Logo } from "../ui/logo";
 import { X } from "lucide-react";
@@ -12,6 +12,10 @@ import { setScrollLocked } from "@/src/motion/scroll-lock";
 
 export function NavBar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const menuPanelRef = useRef<HTMLDivElement>(null);
+  const wasMenuOpen = useRef(false);
   const isMounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -29,9 +33,59 @@ export function NavBar() {
     };
   }, [isOpenMenu]);
 
+  useEffect(() => {
+    const menuPanel = menuPanelRef.current;
+
+    if (!isOpenMenu || !menuPanel) {
+      if (wasMenuOpen.current) {
+        menuButtonRef.current?.focus();
+        wasMenuOpen.current = false;
+      }
+      return;
+    }
+
+    wasMenuOpen.current = true;
+    closeButtonRef.current?.focus();
+
+    const handleMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpenMenu(false);
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusableElements = menuPanel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (!firstElement || !lastElement) {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleMenuKeyDown);
+    return () => document.removeEventListener("keydown", handleMenuKeyDown);
+  }, [isOpenMenu]);
+
   return (
     <>
       <button
+        ref={menuButtonRef}
+        aria-expanded={isOpenMenu}
+        aria-controls="khao-mobile-menu"
         aria-label="main-menu"
         onClick={() => setIsOpenMenu((isOpenMenu) => !isOpenMenu)}
         className="group flex items-center gap-3"
@@ -50,6 +104,13 @@ export function NavBar() {
       {isMounted &&
         createPortal(
           <div
+            id="khao-mobile-menu"
+            ref={menuPanelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu principal do KHAO"
+            aria-hidden={!isOpenMenu}
+            inert={!isOpenMenu}
             className={`
             fixed inset-0 z-60 overflow-y-auto md:overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
@@ -57,14 +118,15 @@ export function NavBar() {
             {/* buttom close */}
             <div className="container mx-auto flex w-full items-center justify-between px-3 py-7 sm:px-10">
               {/* <Logo /> */}
-                <Logo
-            className="
+              <Logo
+                className="
        h-auto
           w-40
           max-md:w-65
           max-sm:w-30"
-          />
+              />
               <button
+                ref={closeButtonRef}
                 onClick={() => setIsOpenMenu(false)}
                 aria-label="Fechar menu"
                 type="button"
