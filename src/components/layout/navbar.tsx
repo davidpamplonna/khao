@@ -16,19 +16,25 @@ export function NavBar() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const wasMenuOpen = useRef(false);
+  const previousBodyOverflowRef = useRef("");
   const isMounted = useSyncExternalStore(
     () => () => {},
     () => true,
     () => false,
   );
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
+    if (!isOpenMenu) {
+      document.body.style.overflow = previousBodyOverflowRef.current;
+      setScrollLocked(false);
+      return;
+    }
 
-    document.body.style.overflow = isOpenMenu ? "hidden" : previousOverflow;
-    setScrollLocked(isOpenMenu);
+    previousBodyOverflowRef.current = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    setScrollLocked(true);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflowRef.current;
       setScrollLocked(false);
     };
   }, [isOpenMenu]);
@@ -112,7 +118,7 @@ export function NavBar() {
             aria-hidden={!isOpenMenu}
             inert={!isOpenMenu}
             className={`
-            fixed inset-0 z-60 overflow-y-auto md:overflow-hidden bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
+            fixed inset-0 z-60 overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
           >
             {/* buttom close */}
@@ -137,7 +143,7 @@ export function NavBar() {
               </button>
             </div>
             {/* conteiner navegation */}
-            <div className="container mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col overflow-hidden px-8 py-8 sm:px-12">
+            <div className="container mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col px-8 py-8 sm:px-12">
               <div className="grid flex-1 grid-cols-1 md:grid-cols-2 md:gap-12">
                 <nav className="flex flex-col justify-center gap-8">
                   <span className="text-khao-gold block uppercase text-xs tracking-[0.4em]">
