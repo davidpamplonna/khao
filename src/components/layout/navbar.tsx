@@ -168,7 +168,7 @@ export function NavBar() {
                           </span>
                         </Link>
                       </li>
-                    ))}``
+                    ))}
                   </ul>
                 </nav>
                 {/* info */}

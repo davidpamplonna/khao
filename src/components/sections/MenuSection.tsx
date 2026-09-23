@@ -227,6 +227,7 @@ export function MenuSection() {
 
   return (
     <section
+      id="cardapio"
       ref={sectionRef}
       className="relative min-h-screen overflow-hidden bg-khao-bg py-20 sm:py-24 md:py-28"
     >
