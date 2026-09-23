@@ -129,6 +129,9 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="reservation-title"
+        data-lenis-prevent
+        data-lenis-prevent-wheel
+        data-lenis-prevent-touch
       >
         <div className="flex items-start justify-between gap-6 border-b border-khao-white/10 px-5 py-5 sm:px-8 sm:py-7">
           <div>
