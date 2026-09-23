@@ -287,7 +287,7 @@ export function CtaSection() {
 
           {/* Button */}
           <div className="cta-button mt-8 sm:mt-10">
-            <ReservationButton variant="secondary">
+            <ReservationButton variant="primary">
               Reserve sua mesa
             </ReservationButton>
           </div>
