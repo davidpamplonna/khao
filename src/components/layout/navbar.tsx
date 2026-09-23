@@ -117,12 +117,15 @@ export function NavBar() {
             aria-label="Menu principal do KHAO"
             aria-hidden={!isOpenMenu}
             inert={!isOpenMenu}
+            data-lenis-prevent
+            data-lenis-prevent-wheel
+            data-lenis-prevent-touch
             className={`
             fixed inset-0 z-60 overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
                 ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
           >
             {/* buttom close */}
-            <div className="container mx-auto flex w-full items-center justify-between px-3 py-7 sm:px-10">
+            <div className="container mx-auto flex w-full items-center justify-between px-3 py-5 sm:px-10">
               {/* <Logo /> */}
               <Logo
                 className="
@@ -160,7 +163,7 @@ export function NavBar() {
                           <span className="w-8 text-xs tracking-widest text-khao-gold relative bottom-1">
                             {link.number}
                           </span>
-                          <span className="text-4xl font-light tracking-wider transition-colors duration-300 group-hover:text-khao-gold md:text-6xl">
+                          <span className="text-2xl font-light tracking-wider transition-colors duration-300 group-hover:text-khao-gold md:text-6xl">
                             {link.label}
                           </span>
                         </Link>
