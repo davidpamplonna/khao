@@ -330,7 +330,7 @@ export function MenuSection() {
             </span>
             <div
               ref={imageRef}
-              className="relative flex aspect-[3/2] w-full max-w-120 items-center justify-center will-change-transform"
+              className="relative flex aspect-3/2 w-full max-w-120 items-center justify-center will-change-transform"
             >
               <Image
                 src={dish.image}
