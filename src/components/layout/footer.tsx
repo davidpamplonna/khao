@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { Logo } from "../ui/logo";
 
-import { KHAO_SOCIAL } from "@/src/data/assets/image";
+import { KHAO_SOCIAL, KHAO_STORY_ICON } from "@/src/data/assets/image";
 
 const FOOTER_LINKS = {
   navigation: [
@@ -61,9 +61,9 @@ export function Footer() {
 
           <SocialLinks />
         </div>
-
-        <FooterCopyright />
       </div>
+
+      <FooterCopyright />
     </footer>
   );
 }
@@ -238,8 +238,23 @@ function SocialIcon({ type }: SocialIconProps) {
 
 function FooterCopyright() {
   return (
-    <div className="mt-[5.6rem] w-full border-t border-white/20 pt-8 text-center">
-      <p className="text-[10px] tracking-[0.25em] text-khao-description/70">
+    <div className="mt-[5.6rem] w-full pt-8 text-center">
+      <div
+        aria-hidden="true"
+        className="flex w-full items-center gap-8 max-sm:gap-4"
+      >
+        <div className="h-px flex-1 bg-linear-to-r from-transparent via-khao-gold/60 to-khao-gold/60" />
+        <Image
+          src={KHAO_STORY_ICON.khao_lotus}
+          alt=""
+          width={138}
+          height={77}
+          className="h-auto w-34.5 shrink-0 object-contain max-sm:w-24"
+        />
+        <div className="h-px flex-1 bg-linear-to-l from-transparent via-khao-gold/60 to-khao-gold/60" />
+      </div>
+
+      <p className="mt-6 text-[10px] tracking-[0.25em] text-khao-description/70">
         © {CURRENT_YEAR} KHAO — COZINHA TAILANDESA
       </p>
     </div>
