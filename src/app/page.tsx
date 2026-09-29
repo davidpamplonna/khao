@@ -5,9 +5,9 @@ import { ExperienceSection } from "../components/sections/ExperienceSection";
 import { MenuSection } from "../components/sections/MenuSection";
 import { CombosSection } from "../components/sections/CombosSection";
 import { CtaSection } from "../components/sections/CtaSection";
-import { GallerySection } from "../components/ui/GallerySection";
 import { Footer } from "../components/layout/footer";
 import { siteUrl } from "@/src/lib/site";
+import { GallerySection } from "../components/sections/GallerySection";
 
 const restaurantStructuredData = {
   "@context": "https://schema.org",

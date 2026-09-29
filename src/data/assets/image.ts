@@ -89,3 +89,16 @@ export const KHAO_gallery = {
   restaurant_03: "/assets/gallery/gallery-restaurant-03.opt.webp",
   restaurant_04: "/assets/gallery/gallery-restaurant-04.opt.webp",
 };
+
+
+export const KHAO_gallery2 = {
+  Chef_tossing_wok_with_flames: "/assets/gallery2/Chef_tossing_wok_with_flames.webp",
+  Hand_holding_chopsticks_over_pad: "/assets/gallery2/Hand_holding_chopsticks_over_pad.webp",
+  Couple_sharing_Thai_dishes3: "/assets/gallery2/Couple_sharing_Thai_dishes.webp",
+  Woman_taking_mirror_selfie: "/assets/gallery2/Woman_taking_mirror_selfie.webp",  
+ Hand_holding_Thai_iced_tea: "/assets/gallery2/Hand_holding_Thai_iced_tea.webp",
+ Friends_clinking_cocktail_glassesa: "/assets/gallery2/Friends_clinking_cocktail_glasses.webp",
+ Woman_eating_pad_thaia: "/assets/gallery2/Woman_eating_pad_thai.webp",
+ Eating_mango_sticky_rice_dessert: "/assets/gallery2/Eating_mango_sticky_rice_dessert.webp",
+ Thai_dishes_on_stone_table: "/assets/gallery2/Thai_dishes_on_stone_table.webp",
+};
