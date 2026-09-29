@@ -52,7 +52,7 @@ export function Footer() {
       <div className="mx-auto flex w-full max-w-342 flex-col items-center">
         <FooterBrand />
 
-        <div className="mt-[6.7rem] grid w-full grid-cols-4 gap-10 max-md:mt-16 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:gap-12">
+        <div className="mt-[6.7rem] grid w-full  gap-10 max-md:mt-16 max-md:grid-cols-2 max-sm:grid-cols-2 max-sm:gap-12 md:grid-cols-3 lg:grid-cols-4">
           <FooterColumn title="Navegação" links={FOOTER_LINKS.navigation} />
 
           <FooterColumn title="Sobre a Khao" links={FOOTER_LINKS.about} />
@@ -128,7 +128,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
             href={href}
             className="
               text-[14px] 
-              tracking-[0.25em]
+              tracking-widest
               text-khao-description
               transition-all
               duration-500
