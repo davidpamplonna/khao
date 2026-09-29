@@ -230,7 +230,17 @@ export function ExperienceSection() {
             md:w-[90%]
           "
         >
-          <Title title="Uma experiência feita para ser " highlight="sentida." />
+          <div className="w-230 max-w-7xl mx-auto">
+            <Title
+              className="text-[clamp(2rem,5vw,4rem)]"
+              title={
+                <>
+                  Uma experiência feita para ser {""}
+                  <span className="text-khao-gold">sentida</span>.
+                </>
+              }
+            />
+          </div>
         </div>
 
         {/* VIDEO */}

@@ -6,6 +6,8 @@ export const KHAO_ASSETS = {
     ornament: "/assets/brand/khao-ornament.webp",
     light: "/assets/brand/khao-light.png",
     pattern: "/assets/brand/khao-pattern.png",
+    khao_smok: "/assets/brand/khao-smok.png",
+    khao_glow: "/assets/brand/khao-glow.png",
   },
 
   hero: {
@@ -25,9 +27,31 @@ export const KHAO_ASSETS = {
   },
 
   menu: {
-    greenCurry: "/assets/menu/menu-green-curry.opt.webp",
-    khaoPad: "/assets/menu/menu-khao-pad.opt.webp",
-    massamanCurry: "/assets/menu/menu-massaman-curry.opt.webp",
+    // pratos
+    green_curry: "/assets/menu/menu-green-curry.opt.webp",
+    khao_pad: "/assets/menu/menu-khao-pad.opt.webp",
+    massaman_curry: "/assets/menu/menu-massaman-curry.opt.webp",
+    pad_kra_pao: "/assets/menu/menu-pad-kra-pao.opt.webp",
+    pad_thai_de_camarao: "/assets/menu/menu-pad-thai-de-camarao.opt.webp",
+    tom_yum_goong: "/assets/menu/menu-tom-yum-goong.opt.webp",
+    satay: "/assets/menu/menu-satay.opt.webp",
+    spring_rolls: "/assets/menu/menu-spring-rolls.opt.webp",
+
+    // sobremessas
+    thai_coconut: "/assets/menu/menu-thai-coconut.opt.webp",
+    khao_chocolate: "/assets/menu/menu-khao-chocolate.opt.webp",
+    mango_sticky_rice: "/assets/menu/menu-mango-sticky-rice.opt.webp",
+
+    // DRINKS
+    khao_signature: "/assets/menu/menu-khao-signature.opt.webp",
+    bangkok_mule: "/assets/menu/menu-bangkok-mule.opt.webp",
+    lemongrass: "/assets/menu/menu-lemongrass.opt.webp",
+  },
+
+  menu_poster: {
+    dishes: "/assets/menu/dishes.webp",
+    desserts: "/assets/menu/desserts.webp",
+    drinks: "/assets/menu/drinks.webp",
   },
 
   gallery: {
