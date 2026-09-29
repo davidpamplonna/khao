@@ -353,8 +353,18 @@ export function EssenceSection() {
       {" "}
       <div className="container mx-auto px-4 py-20 sm:px-8 md:px-12 md:py-32">
         {" "}
-        <div className="relative mb-16 text-center md:mb-24">
-          {" "}
+
+        
+        <div className="relative mb-16 text-center md:mb-34">
+          <div className="w-180 max-w-7xl mx-auto">
+            <Title 
+          ornament="Essência"
+          title="A Tailândia não se explica. Se sente."
+           className="text-[clamp(2rem,5vw,4rem)]"
+          />
+          </div>
+
+          {/* {" "}
           <span
             data-essence-header
             className="absolute left-0 top-0 text-left text-xs font-medium tracking-[0.2em] text-khao-gold md:text-sm"
@@ -372,7 +382,7 @@ export function EssenceSection() {
               title="A Tailândia não se explica."
               highlight="Se sente."
             />{" "}
-          </div>{" "}
+          </div>{" "} */}
         </div>{" "}
         <div className="grid items-start gap-x-12 md:grid-cols-2">
           {" "}
