@@ -3,12 +3,17 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
+
 import { KHAO_ASSETS } from "@/src/config/khao-assets";
+import { gsap } from "@/src/lib/gsap";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+
 import { Title } from "../ui/title";
 import { Button } from "../ui/button";
 
-import { gsap } from "@/src/lib/gsap";
-import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+const MENU_TITLE = "O difícil não é escolher. É escolher só um.";
+
+const MENU_DESCRIPTION = "Uma seleção dos sabores que definem o KHAO.";
 
 const CATEGORY_CARDS = [
   {
@@ -33,6 +38,7 @@ const CATEGORY_CARDS = [
 
 export function MenuSection() {
   const sectionRef = useRef<HTMLElement>(null);
+
   const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
@@ -40,52 +46,176 @@ export function MenuSection() {
 
     if (!section || reducedMotion) return;
 
+    let media: ReturnType<typeof gsap.matchMedia> | undefined;
+
     const context = gsap.context(() => {
-      const header = gsap.utils.toArray<HTMLElement>("[data-menu-header]");
+      const titleWords = gsap.utils.toArray<HTMLElement>("[data-menu-word]");
+
+      if (titleWords.length) {
+        gsap.fromTo(
+          titleWords,
+          { autoAlpha: 0.08, y: 18 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 0.75,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "[data-menu-title]",
+              start: "top 78%",
+              once: true,
+            },
+          },
+        );
+      }
+
+      const descriptionWords = gsap.utils.toArray<HTMLElement>(
+        "[data-menu-description-word]",
+      );
+
+      if (descriptionWords.length) {
+        gsap.fromTo(
+          descriptionWords,
+          { autoAlpha: 0.15, y: 22 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.07,
+            duration: 0.65,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "[data-menu-description]",
+              start: "top 82%",
+              once: true,
+            },
+          },
+        );
+      }
+
       const cards = gsap.utils.toArray<HTMLElement>("[data-menu-card]");
+      const cardsContainer =
+        section.querySelector<HTMLElement>("[data-menu-cards]");
+
+      if (cards.length && cardsContainer) {
+        media = gsap.matchMedia();
+
+        media.add("(min-width: 1024px)", () => {
+          const cardsTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: cardsContainer,
+              start: "top 78%",
+              once: true,
+            },
+          });
+
+          cards.forEach((card, index) => {
+            const image = card.querySelector<HTMLElement>(
+              "[data-menu-card-image]",
+            );
+            const label = card.querySelector<HTMLElement>(
+              "[data-menu-card-label]",
+            );
+            const position = index * 0.42;
+
+            cardsTimeline.fromTo(
+              card,
+              { autoAlpha: 0, rotateY: 24, y: 22 },
+              {
+                autoAlpha: 1,
+                rotateY: 0,
+                y: 0,
+                duration: 1.1,
+                ease: "power2.out",
+              },
+              position,
+            );
+
+            if (image) {
+              cardsTimeline.fromTo(
+                image,
+                { scale: 1.1 },
+                { scale: 1, duration: 1.25, ease: "power2.out" },
+                position,
+              );
+            }
+
+            if (label) {
+              cardsTimeline.fromTo(
+                label,
+                { autoAlpha: 0, y: 16 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.65,
+                  ease: "power2.out",
+                },
+                position + 0.4,
+              );
+            }
+          });
+        });
+
+        media.add("(max-width: 1023px)", () => {
+          cards.forEach((card) => {
+            const image = card.querySelector<HTMLElement>(
+              "[data-menu-card-image]",
+            );
+            const label = card.querySelector<HTMLElement>(
+              "[data-menu-card-label]",
+            );
+
+            const cardTimeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: card,
+                start: "top 88%",
+                once: true,
+              },
+            });
+
+            cardTimeline.fromTo(
+              card,
+              { autoAlpha: 0, y: 38 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 1,
+                ease: "power2.out",
+              },
+            );
+
+            if (image) {
+              cardTimeline.fromTo(
+                image,
+                { scale: 1.09 },
+                { scale: 1, duration: 1.15, ease: "power2.out" },
+                0,
+              );
+            }
+
+            if (label) {
+              cardTimeline.fromTo(
+                label,
+                { autoAlpha: 0, y: 14 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.6,
+                  ease: "power2.out",
+                },
+                0.35,
+              );
+            }
+          });
+        });
+      }
+
       const button = section.querySelector<HTMLElement>("[data-menu-button]");
-
-      header.forEach((element) => {
-        gsap.fromTo(
-          element,
-          { autoAlpha: 0, y: 28 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 88%",
-              toggleActions: "play none none none",
-            },
-          },
-        );
-      });
-
-      cards.forEach((card, index) => {
-        gsap.fromTo(
-          card,
-          { autoAlpha: 0, y: 32 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.85,
-            delay: index * 0.08,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-          },
-        );
-      });
 
       if (button) {
         gsap.fromTo(
           button,
-          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 0, y: 28 },
           {
             autoAlpha: 1,
             y: 0,
@@ -94,98 +224,322 @@ export function MenuSection() {
             scrollTrigger: {
               trigger: button,
               start: "top 92%",
-              toggleActions: "play none none none",
+              once: true,
             },
           },
         );
       }
     }, section);
 
-    return () => context.revert();
+    return () => {
+      media?.revert();
+      context.revert();
+    };
   }, [reducedMotion]);
 
   return (
     <section
       id="cardapio"
       ref={sectionRef}
-      className="relative isolate overflow-hidden bg-khao-bg px-[clamp(1.1rem,3.45vw,3.5rem)] pt-[clamp(5.5rem,7vw,8rem)] pb-[clamp(5rem,8vw,8rem)]"
+      className="
+        relative
+        isolate
+        overflow-hidden
+        bg-khao-bg
+        px-[clamp(1.1rem,3.45vw,3.5rem)]
+        pt-[clamp(5.5rem,7vw,8rem)]
+        pb-[clamp(5rem,8vw,8rem)]
+      "
     >
-      {/* backgrounds */}
+      {/*           BACKGROUND GLOW
+       */}
+
       <Image
         src={KHAO_ASSETS.brand.khao_glow}
         width={200}
         height={200}
-        alt="Decoração"
+        alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-[20%] w-56 md:w-126 "
+        className="
+          pointer-events-none
+          absolute
+          left-0
+          top-[20%]
+          w-56
+          md:w-126
+        "
       />
+      {/*  BACKGROUND SMOKE */}
+
       <Image
         src={KHAO_ASSETS.brand.khao_smok}
         width={200}
         height={200}
-        alt="Decoração"
+        alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -right-4 top-[50%] w-56 md:w-126 "
+        className="
+          pointer-events-none
+          absolute
+          -right-4
+          top-[50%]
+          w-56
+          md:w-126
+        "
       />
-      
+
       <div className="relative z-10 mx-auto w-full max-w-376">
-        {/* titulo */}
-        <div className="relative z-10 mx-auto w-full max-w-350 flex flex-col gap-20">
+        {/* HEADER */}
+
+        <div
+          className="
+            relative
+            z-10
+            mx-auto
+            flex
+            w-full
+            max-w-350
+            flex-col
+            gap-20
+          "
+        >
+          {/* TÍTULO */}
+
           <div
-            data-menu-header
-            className="md:w-170 md:max-w-200 md:mx-auto text-center"
+            data-menu-title
+            className="
+              mx-auto
+              text-center
+              md:w-170
+              md:max-w-200
+            "
           >
             <Title
               ornament="Menu"
-              title="O difícil não é escolher. É escolher só um."
+              title="O difícil não é escolher.
+É escolher só um."
               className="text-[clamp(2rem,5vw,4rem)]"
             />
           </div>
-          <p data-menu-header className="khao-description w-60">
-            Uma seleção dos sabores que definem o KHAO.
+
+          {/* DESCRIÇÃO */}
+
+          <p
+            data-menu-description
+            className="
+              khao-description
+              w-60
+              leading-relaxed
+              tracking-widest
+            "
+            aria-label={MENU_DESCRIPTION}
+          >
+            {MENU_DESCRIPTION.split(" ").map((word, index) => (
+              <span
+                key={`${word}-${index}`}
+                data-menu-description-word
+                aria-hidden="true"
+                className="mr-[0.28em] inline-block"
+              >
+                {word}
+              </span>
+            ))}
           </p>
         </div>
-        {/* conteudo */}
-        <div className="mt-11 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:mt-[clamp(2.8rem,5.4vw,5.25rem)] lg:grid-cols-3 lg:gap-y-20">
+
+      {/* CARDS */}
+
+        <div
+          data-menu-cards
+          className="
+            mt-11
+            grid
+            grid-cols-1
+            gap-x-8
+            gap-y-14
+            sm:grid-cols-2
+            lg:mt-[clamp(2.8rem,5.4vw,5.25rem)]
+            lg:grid-cols-3
+            lg:gap-y-20
+          "
+          style={{
+            perspective: "1400px",
+          }}
+        >
           {CATEGORY_CARDS.map((category) => (
             <button
               key={category.categoryId}
               type="button"
               data-menu-card
-              className="group relative block aspect-[0.82] w-full cursor-pointer bg-transparent p-0 text-left text-inherit focus-visible:outline-none"
+              className="
+                group
+                relative
+                block
+                aspect-[0.82]
+                w-full
+                cursor-pointer
+                bg-transparent
+                p-0
+                text-left
+                text-inherit
+                focus-visible:outline-none
+              "
             >
-              <span className="absolute inset-0 overflow-hidden bg-khao-black">
+             {/* IMAGE */}
+
+              <span
+                className="
+                  absolute
+                  inset-0
+                  overflow-hidden
+                  bg-khao-black
+                "
+              >
                 <Image
                   src={category.image}
                   alt={category.alt}
                   fill
-                  sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, 30vw"
-                  className="object-cover transition-all duration-700 group-hover:scale-[1.045] group-hover:brightness-[1.08] group-focus-visible:scale-[1.045] group-focus-visible:brightness-[1.08] motion-reduce:transition-none"
+                  data-menu-card-image
+                  sizes="
+                    (max-width: 639px) 92vw,
+                    (max-width: 1023px) 45vw,
+                    30vw
+                  "
+                  className="
+                    object-cover
+                    transition-all
+                    duration-700
+                    group-hover:scale-[1.045]
+                    group-hover:brightness-[1.08]
+                    group-focus-visible:scale-[1.045]
+                    group-focus-visible:brightness-[1.08]
+                    motion-reduce:transition-none
+                  "
                 />
 
-                {/* efeitos */}
-                <span className="pointer-events-none absolute inset-0 border border-transparent transition-colors duration-500 group-hover:border-khao-gold/40 group-focus-visible:border-khao-gold/60" />
-                <span className="pointer-events-none absolute inset-x-0 bottom-0 top-[45%] bg-linear-to-b from-transparent to-khao-black/45 opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100" />
+                {/* BORDER */}
 
-                {/* buttom */}
-                <span className="pointer-events-none absolute right-4 top-4 grid size-11 translate-y-1 place-items-center rounded-full border border-khao-white/50 bg-khao-black/30 text-khao-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 max-[700px]:translate-y-0 max-[700px]:opacity-100 motion-reduce:transition-none">
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    border
+                    border-transparent
+                    transition-colors
+                    duration-500
+                    group-hover:border-khao-gold/40
+                    group-focus-visible:border-khao-gold/60
+                  "
+                />
+
+                {/* GRADIENT */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    bottom-0
+                    top-[45%]
+                    bg-linear-to-b
+                    from-transparent
+                    to-khao-black/45
+                    opacity-70
+                    transition-opacity
+                    duration-500
+                    group-hover:opacity-100
+                    group-focus-visible:opacity-100
+                  "
+                />
+
+                {/* ARROW */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    right-4
+                    top-4
+                    grid
+                    size-11
+                    translate-y-1
+                    place-items-center
+                    rounded-full
+                    border
+                    border-khao-white/50
+                    bg-khao-black/30
+                    text-khao-white
+                    opacity-0
+                    transition
+                    duration-300
+                    group-hover:translate-y-0
+                    group-hover:opacity-100
+                    group-focus-visible:translate-y-0
+                    group-focus-visible:opacity-100
+                    max-[700px]:translate-y-0
+                    max-[700px]:opacity-100
+                    motion-reduce:transition-none
+                  "
+                >
                   <ArrowRight size={20} strokeWidth={1.3} />
                 </span>
 
-                <span className="pointer-events-none absolute inset-0 outline outline-transparent outline-offset-[5px] group-focus-visible:outline-khao-gold" />
+                {/* FOCUS */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    outline
+                    outline-transparent
+                    outline-offset-[5px]
+                    group-focus-visible:outline-khao-gold
+                  "
+                />
               </span>
-              <span className="font-khao-title text-khao-gold absolute bottom-[-0.40em] right-0 whitespace-nowrap text-right text-[clamp(2.2rem,5vw,3rem)] font-bold leading-none drop-shadow-2xl">
+
+            {/*     CATEGORY LABEL
+ */}
+
+              <span
+                data-menu-card-label
+                className="
+                  absolute
+                  bottom-[-0.40em]
+                  right-0
+                  whitespace-nowrap
+                  text-right
+                  font-khao-title
+                  text-[clamp(2.2rem,5vw,3rem)]
+                  font-bold
+                  leading-none
+                  text-khao-gold
+                  drop-shadow-2xl
+                "
+              >
                 {category.label}
               </span>
             </button>
           ))}
         </div>
-        <div className="mt-[clamp(5rem,9vw,8.5rem)] flex justify-center">
+
+        {/* ==========================================================
+            CTA
+            ========================================================== */}
+
+        <div
+          className="
+            mt-[clamp(5rem,9vw,8.5rem)]
+            flex
+            justify-center
+          "
+        >
           <Button
             data-menu-button
-            type="buttom"
+            type="button"
             variant="secondary"
-            href={"#pdf"}
+            href="#pdf"
           >
             Ver menu completo
           </Button>

@@ -261,7 +261,7 @@ export function CtaSection() {
         >
           {/* Title */}
           <div className="cta-title">
-            <Title
+            {/* <Title
               id="khao-cta-title"
               title={
                 <>
@@ -271,6 +271,15 @@ export function CtaSection() {
               titleClassName="
                 text-[clamp(2.25rem,6vw,5rem)]
               "
+            /> */}
+            <Title 
+              title={
+                <>
+                  Venha sentir o {''}
+                  <span className="text-khao-gold">KHAO</span>
+                </>
+              }
+              className="text-[clamp(2rem,5vw,4rem)]"
             />
           </div>
 
