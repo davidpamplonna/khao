@@ -10,10 +10,13 @@ import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 
 import { Title } from "../ui/title";
 
+const EXPERIENCE_TITLE = "Uma experiência feita para ser sentida.";
+
 export function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoWrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
   const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
@@ -21,24 +24,30 @@ export function ExperienceSection() {
     const videoWrapper = videoWrapperRef.current;
     const video = videoRef.current;
 
-    if (!section || !videoWrapper || !video) {
-      return;
-    }
-
-    if (reducedMotion) {
+    if (!section || !videoWrapper || !video || reducedMotion) {
       return;
     }
 
     const context = gsap.context(() => {
+      /*
+       * ELEMENTOS
+       */
+
       const title = section.querySelector<HTMLElement>(
         "[data-experience-title]",
+      );
+
+      const titleWords = gsap.utils.toArray<HTMLElement>(
+        "[data-experience-word]",
       );
 
       const ornaments = gsap.utils.toArray<HTMLElement>(
         "[data-experience-ornament]",
       );
 
-      // RESPONSIVE MOTION
+      /*
+       * RESPONSIVE MOTION
+       */
 
       const media = gsap.matchMedia();
 
@@ -53,7 +62,9 @@ export function ExperienceSection() {
             mobile: boolean;
           };
 
-          // INITIAL STATE
+          /*
+           * INITIAL STATE
+           */
 
           gsap.set(videoWrapper, {
             scaleX: desktop ? 0.64 : 0.88,
@@ -66,40 +77,74 @@ export function ExperienceSection() {
             transformOrigin: "center center",
           });
 
-          gsap.set(title, {
-            autoAlpha: 0,
-            y: 30,
+          /*
+           * TITLE
+           */
+
+          gsap.set(titleWords, {
+            autoAlpha: 0.08,
+            y: mobile ? 14 : 20,
+            willChange: "transform, opacity",
           });
+
+          /*
+           * ORNAMENTOS
+           */
 
           gsap.set(ornaments, {
             autoAlpha: 0,
             scale: 0.9,
+            willChange: "transform, opacity",
           });
 
-          // INTRO
+          /*
+           * INTRO
+           *
+           * Os ornamentos entram normalmente.
+           *
+           * O título agora é controlado pelo scroll,
+           * seguindo o mesmo comportamento da EssenceSection.
+           */
 
           const intro = gsap.timeline();
 
-          intro
-            .to(title, {
+          intro.to(ornaments, {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out",
+          });
+
+          /*
+           * TITLE SCROLL REVEAL
+           *
+           * Cada palavra ganha vida conforme
+           * o usuário entra na seção.
+           */
+
+          if (titleWords.length) {
+            gsap.to(titleWords, {
               autoAlpha: 1,
               y: 0,
-              duration: 1,
-              ease: "power3.out",
-            })
-            .to(
-              ornaments,
-              {
-                autoAlpha: 1,
-                scale: 1,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power3.out",
-              },
-              "-=0.7",
-            );
+              stagger: 0.1,
+              ease: "none",
 
-          // SCROLL TIMELINE
+              scrollTrigger: {
+                trigger: title,
+                start: "top 78%",
+                toggleActions: "play none none none",
+                once: true,
+              },
+            });
+          }
+
+          /*
+           * SCROLL TIMELINE
+           *
+           * A seção continua funcionando como uma
+           * experiência pinada.
+           */
 
           const experienceTimeline = gsap.timeline({
             scrollTrigger: {
@@ -107,7 +152,7 @@ export function ExperienceSection() {
               start: "top top",
 
               /*
-               * Mobile precisa de menos distância de scroll.
+               * Mobile precisa de menos distância.
                */
 
               end: mobile ? "+=90%" : "+=120%",
@@ -120,35 +165,22 @@ export function ExperienceSection() {
           });
 
           /*
-           *
            * VIDEO EXPANSION
-           *
-           *
-           * Desktop:
-           *
-           * 64% → 100%
-           * 52vh → 100vh
-           *
-           * Mobile:
-           *
-           * 88% → 100%
-           * 72% → 100%
-           *
-           * Porém o próprio wrapper mobile possui somente 58dvh.
-           * Portanto o resultado visual nunca ocupa a viewport inteira.
            */
 
           experienceTimeline.to(
             videoWrapper,
             {
               scaleX: 1,
-              scaleY: mobile ? 1 : 1,
+              scaleY: 1,
               ease: "none",
             },
             0,
           );
 
-          // CINEMATIC VIDEO
+          /*
+           * CINEMATIC VIDEO
+           */
 
           experienceTimeline.to(
             video,
@@ -159,7 +191,12 @@ export function ExperienceSection() {
             0,
           );
 
-          // TITLE EXIT
+          /*
+           * TITLE EXIT
+           *
+           * Depois de aparecer, o título começa
+           * a sair enquanto o vídeo ocupa a tela.
+           */
 
           if (title) {
             experienceTimeline.to(
@@ -187,7 +224,7 @@ export function ExperienceSection() {
     <section
       id="experiencia"
       ref={sectionRef}
-      className="relative h-dvh min-h-screen overflow-hidden bg-khao-bg"
+      className="relative h-dvh min-h-screen overflow-hidden bg-khao-surface"
       aria-labelledby="experience-title"
     >
       <div className="relative flex h-full w-full items-center justify-center">
@@ -230,15 +267,17 @@ export function ExperienceSection() {
             md:w-[90%]
           "
         >
-          <div className="w-230 max-w-7xl mx-auto">
-            <Title
-              className="text-[clamp(2rem,5vw,4rem)]"
-              title={
-                <>
-                  Uma experiência feita para ser {""}
-                  <span className="text-khao-gold">sentida</span>.
-                </>
-              }
+          <div className="mx-auto w-230 max-w-7xl">
+
+            <Title 
+            title={
+              <>
+                UMA EXPERIÊNCIA FEITA PARA SER {''} 
+                <span className="text-khao-gold">SENTIDA</span>
+                .
+              </>
+            }
+            className="text-khao-black text-[clamp(2rem,5vw,4rem)]"
             />
           </div>
         </div>
@@ -277,7 +316,8 @@ export function ExperienceSection() {
             <source src={KHAO_EXPERIENCE_CLIP} type="video/mp4" />
           </video>
 
-          {/* Cinematic overlay */}
+          {/* CINEMATIC OVERLAY */}
+
           <div
             className="
               pointer-events-none
@@ -288,7 +328,7 @@ export function ExperienceSection() {
           />
         </div>
 
-        {/*ORNAMENT BUTTOM */}
+        {/* ORNAMENT BOTTOM */}
 
         <div
           data-experience-ornament

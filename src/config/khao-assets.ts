@@ -24,6 +24,8 @@ export const KHAO_ASSETS = {
     dishFinishing: "/assets/essence/essence-dish-finishing.opt.webp",
 
     wokFire: "/assets/essence/essence-wok-fire.opt.webp",
+    restaurant:
+    "/assets/essence/restaurant.webp"
   },
 
   menu: {
