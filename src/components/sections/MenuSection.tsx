@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 
 import { KHAO_ASSETS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
 
 import { Title } from "../ui/title";
 import { Button } from "../ui/button";
-
 
 const MENU_DESCRIPTION = "Uma seleção dos sabores que definem o KHAO.";
 
@@ -40,66 +40,52 @@ export function MenuSection() {
 
   const reducedMotion = useReducedMotion();
 
+  const revealConfigs = useMemo(
+    () => [
+      {
+        selector: "[data-menu-title] h2",
+        trigger: "[data-menu-title]",
+        start: "top 78%",
+        from: { autoAlpha: 0.08, y: 18 },
+        to: { autoAlpha: 1, y: 0, duration: 0.75, ease: "power2.out" },
+      },
+      {
+        selector: "[data-menu-description-word]",
+        trigger: "[data-menu-description]",
+        start: "top 82%",
+        from: { autoAlpha: 0.15, y: 22 },
+        to: { autoAlpha: 1, y: 0, duration: 0.65, ease: "power2.out" },
+        stagger: 0.07,
+      },
+      {
+        selector: "[data-menu-button]",
+        trigger: "[data-menu-button]",
+        start: "top 92%",
+        from: { autoAlpha: 0, y: 28 },
+        to: { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      },
+    ],
+    [],
+  );
+
+  useScrollReveal(sectionRef, revealConfigs);
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
 
     if (!section || reducedMotion) return;
 
-    let media: ReturnType<typeof gsap.matchMedia> | undefined;
-
     const context = gsap.context(() => {
-      const titleHeading = section.querySelector<HTMLElement>(
-        "[data-menu-title] h2",
-      );
-
-      if (titleHeading) {
-        gsap.fromTo(
-          titleHeading,
-          { autoAlpha: 0.08, y: 18 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.75,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: "[data-menu-title]",
-              start: "top 78%",
-              once: true,
-            },
-          },
-        );
-      }
-
-      const descriptionWords = gsap.utils.toArray<HTMLElement>(
-        "[data-menu-description-word]",
-      );
-
-      if (descriptionWords.length) {
-        gsap.fromTo(
-          descriptionWords,
-          { autoAlpha: 0.15, y: 22 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            stagger: 0.07,
-            duration: 0.65,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: "[data-menu-description]",
-              start: "top 82%",
-              once: true,
-            },
-          },
-        );
-      }
-
       const cards = gsap.utils.toArray<HTMLElement>("[data-menu-card]");
       const cardsContainer =
         section.querySelector<HTMLElement>("[data-menu-cards]");
 
       if (cards.length && cardsContainer) {
-        media = gsap.matchMedia();
+        const media = gsap.matchMedia();
 
+        /*
+         * DESKTOP
+         */
         media.add("(min-width: 1024px)", () => {
           const cardsTimeline = gsap.timeline({
             scrollTrigger: {
@@ -113,14 +99,20 @@ export function MenuSection() {
             const image = card.querySelector<HTMLElement>(
               "[data-menu-card-image]",
             );
+
             const label = card.querySelector<HTMLElement>(
               "[data-menu-card-label]",
             );
+
             const position = index * 0.42;
 
             cardsTimeline.fromTo(
               card,
-              { autoAlpha: 0, rotateY: 24, y: 22 },
+              {
+                autoAlpha: 0,
+                rotateY: 24,
+                y: 22,
+              },
               {
                 autoAlpha: 1,
                 rotateY: 0,
@@ -134,8 +126,14 @@ export function MenuSection() {
             if (image) {
               cardsTimeline.fromTo(
                 image,
-                { scale: 1.1 },
-                { scale: 1, duration: 1.25, ease: "power2.out" },
+                {
+                  scale: 1.1,
+                },
+                {
+                  scale: 1,
+                  duration: 1.25,
+                  ease: "power2.out",
+                },
                 position,
               );
             }
@@ -143,7 +141,10 @@ export function MenuSection() {
             if (label) {
               cardsTimeline.fromTo(
                 label,
-                { autoAlpha: 0, y: 16 },
+                {
+                  autoAlpha: 0,
+                  y: 16,
+                },
                 {
                   autoAlpha: 1,
                   y: 0,
@@ -156,11 +157,15 @@ export function MenuSection() {
           });
         });
 
+        /*
+         * MOBILE / TABLET
+         */
         media.add("(max-width: 1023px)", () => {
           cards.forEach((card) => {
             const image = card.querySelector<HTMLElement>(
               "[data-menu-card-image]",
             );
+
             const label = card.querySelector<HTMLElement>(
               "[data-menu-card-label]",
             );
@@ -175,7 +180,10 @@ export function MenuSection() {
 
             cardTimeline.fromTo(
               card,
-              { autoAlpha: 0, y: 38 },
+              {
+                autoAlpha: 0,
+                y: 38,
+              },
               {
                 autoAlpha: 1,
                 y: 0,
@@ -187,8 +195,14 @@ export function MenuSection() {
             if (image) {
               cardTimeline.fromTo(
                 image,
-                { scale: 1.09 },
-                { scale: 1, duration: 1.15, ease: "power2.out" },
+                {
+                  scale: 1.09,
+                },
+                {
+                  scale: 1,
+                  duration: 1.15,
+                  ease: "power2.out",
+                },
                 0,
               );
             }
@@ -196,7 +210,10 @@ export function MenuSection() {
             if (label) {
               cardTimeline.fromTo(
                 label,
-                { autoAlpha: 0, y: 14 },
+                {
+                  autoAlpha: 0,
+                  y: 14,
+                },
                 {
                   autoAlpha: 1,
                   y: 0,
@@ -209,32 +226,9 @@ export function MenuSection() {
           });
         });
       }
-
-      const button = section.querySelector<HTMLElement>("[data-menu-button]");
-
-      if (button) {
-        gsap.fromTo(
-          button,
-          { autoAlpha: 0, y: 28 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: button,
-              start: "top 92%",
-              once: true,
-            },
-          },
-        );
-      }
     }, section);
 
-    return () => {
-      media?.revert();
-      context.revert();
-    };
+    return () => context.revert();
   }, [reducedMotion]);
 
   return (
@@ -257,9 +251,15 @@ export function MenuSection() {
       <Image
         src={KHAO_ASSETS.brand.khao_glow}
         width={200}
+        loading="lazy"
+        quality={75}
         height={200}
-        alt=""
+        alt="khao_glow"
         aria-hidden="true"
+        sizes="
+          (max-width: 767px) 14rem,
+          31.5rem
+        "
         className="
           pointer-events-none
           absolute
@@ -274,9 +274,15 @@ export function MenuSection() {
       <Image
         src={KHAO_ASSETS.brand.khao_smok}
         width={200}
+        loading="lazy"
+        quality={75}
         height={200}
-        alt=""
+        alt="khao_smoke"
         aria-hidden="true"
+        sizes="
+          (max-width: 767px) 14rem,
+          31.5rem
+        "
         className="
           pointer-events-none
           absolute
@@ -346,7 +352,7 @@ export function MenuSection() {
           </p>
         </div>
 
-      {/* CARDS */}
+        {/* CARDS */}
 
         <div
           data-menu-cards
@@ -384,7 +390,7 @@ export function MenuSection() {
                 focus-visible:outline-none
               "
             >
-             {/* IMAGE */}
+              {/* IMAGE */}
 
               <span
                 className="
@@ -398,6 +404,8 @@ export function MenuSection() {
                   src={category.image}
                   alt={category.alt}
                   fill
+                  quality={85}
+                  loading="lazy"
                   data-menu-card-image
                   sizes="
                     (max-width: 639px) 92vw,
@@ -455,7 +463,7 @@ export function MenuSection() {
                 {/* ARROW */}
 
                 <span
-                  className="
+                  className=" 
                     pointer-events-none
                     absolute
                     right-4
@@ -499,8 +507,8 @@ export function MenuSection() {
                 />
               </span>
 
-            {/*     CATEGORY LABEL
- */}
+              {/*     CATEGORY LABEL
+               */}
 
               <span
                 data-menu-card-label
@@ -524,7 +532,7 @@ export function MenuSection() {
           ))}
         </div>
 
-      {/* CTA */}
+        {/* CTA */}
 
         <div
           className="

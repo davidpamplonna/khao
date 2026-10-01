@@ -1,13 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 
-import { KHAO_VIDEOS, KHAO_ASSETS } from "@/src/config/khao-assets";
+import { KHAO_ASSETS, KHAO_VIDEOS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
 
 import { Title } from "../ui/title";
-
 
 export function ExperienceSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,6 +15,21 @@ export function ExperienceSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const reducedMotion = useReducedMotion();
+
+  const revealConfigs = useMemo(
+    () => [
+      {
+        selector: "[data-experience-title] h2",
+        trigger: "[data-experience-title]",
+        start: "top 78%",
+        from: { autoAlpha: 0.08, y: 20 },
+        to: { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" },
+      },
+    ],
+    [],
+  );
+
+  useScrollReveal(sectionRef, revealConfigs);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -26,8 +41,6 @@ export function ExperienceSection() {
     }
 
     const context = gsap.context(() => {
-    //   ELEMENTOS
-
       const title = section.querySelector<HTMLElement>(
         "[data-experience-title]",
       );
@@ -38,33 +51,41 @@ export function ExperienceSection() {
         "[data-experience-ornament]",
       );
 
-      // RESPONSIVE MOTION
-
       const media = gsap.matchMedia();
 
       media.add(
         {
           desktop: "(min-width: 768px)",
           mobile: "(max-width: 767px)",
+          narrow: "(max-width: 380px)",
         },
         (context) => {
-          const { desktop, mobile } = context.conditions as {
+          const { desktop, mobile, narrow } = context.conditions as {
             desktop: boolean;
             mobile: boolean;
+            narrow: boolean;
           };
 
-          // INITIAL STATE
+          // VIDEO INITIAL STATE
 
           gsap.set(videoWrapper, {
-            scaleX: desktop ? 0.64 : 0.88,
-            scaleY: desktop ? 0.52 : 0.72,
-            y: mobile ? 20 : 48,
+            scaleX: desktop ? 0.64 : narrow ? 0.92 : 0.9,
+
+            scaleY: desktop ? 0.52 : narrow ? 0.78 : 0.74,
+
+            y: desktop ? 48 : 20,
+
             transformOrigin: "center center",
+
+            willChange: "transform",
           });
 
           gsap.set(video, {
-            scale: desktop ? 1.12 : 1.08,
+            scale: desktop ? 1.12 : 1.06,
+
             transformOrigin: "center center",
+
+            willChange: "transform",
           });
 
           // TITLE
@@ -77,57 +98,39 @@ export function ExperienceSection() {
             });
           }
 
-        //  ORNAMENTOS
+          // ORNAMENTS
 
-          gsap.set(ornaments, {
-            autoAlpha: 0,
-            scale: 0.9,
-            willChange: "transform, opacity",
-          });
+          if (ornaments.length) {
+            gsap.set(ornaments, {
+              autoAlpha: 0,
+              scale: 0.9,
+              willChange: "transform, opacity",
+            });
 
-        //  INTRO
-
-          const intro = gsap.timeline();
-
-          intro.to(ornaments, {
-            autoAlpha: 1,
-            scale: 1,
-            duration: 1,
-            stagger: 0.15,
-            ease: "power3.out",
-          });
-
-          // TITLE SCROLL REVEAL
-
-          if (titleHeading) {
-            gsap.to(titleHeading, {
+            gsap.to(ornaments, {
               autoAlpha: 1,
-              y: 0,
-              ease: "none",
-
-              scrollTrigger: {
-                trigger: title,
-                start: "top 78%",
-                toggleActions: "play none none none",
-                once: true,
-              },
+              scale: 1,
+              duration: 1,
+              stagger: 0.15,
+              ease: "power3.out",
             });
           }
 
-          // SCROLL TIMELINE
+          // EXPERIENCE TIMELINE
 
           const experienceTimeline = gsap.timeline({
             scrollTrigger: {
               trigger: section,
               start: "top top",
 
-              // Mobile precisa de menos distância.
-
-              end: mobile ? "+=90%" : "+=120%",
+              end: desktop ? "+=120%" : narrow ? "+=80%" : "+=90%",
 
               scrub: 1,
+
               pin: true,
+
               anticipatePin: 1,
+
               invalidateOnRefresh: true,
             },
           });
@@ -145,7 +148,7 @@ export function ExperienceSection() {
             0,
           );
 
-          // CINEMATIC VIDEO
+          // CINEMATIC VIDEO SCALE
 
           experienceTimeline.to(
             video,
@@ -156,7 +159,7 @@ export function ExperienceSection() {
             0,
           );
 
-          //  TITLE EXIT
+          // TITLE EXIT
 
           if (title) {
             experienceTimeline.to(
@@ -184,12 +187,19 @@ export function ExperienceSection() {
     <section
       id="experiencia"
       ref={sectionRef}
-      className="relative h-dvh min-h-screen overflow-hidden bg-khao-surface"
       aria-labelledby="experience-title"
+      className="
+        relative
+        h-dvh
+        min-h-150
+        overflow-hidden
+        bg-khao-surface
+        sm:min-h-170
+      "
     >
       <div className="relative flex h-full w-full items-center justify-center">
-
         {/* TITLE */}
+
         <div
           id="experience-title"
           data-experience-title
@@ -198,24 +208,27 @@ export function ExperienceSection() {
             left-1/2
             top-[8%]
             z-20
-            w-[94%]
+            w-[92%]
             -translate-x-1/2
             text-center
+            sm:w-[88%]
             md:top-[9%]
             md:w-[90%]
           "
         >
-          <div className=" md:mx-auto md:w-230 md:max-w-7xl">
-
-            <Title 
-            title={
-              <>
-                UMA EXPERIÊNCIA FEITA PARA SER {''} 
-                <span className="text-khao-gold">SENTIDA</span>
-                .
-              </>
-            }
-            className="text-khao-black text-[clamp(2rem,5vw,4rem)]"
+          <div className="mx-auto md:w-230 md:max-w-7xl">
+            <Title
+              title={
+                <>
+                  UMA EXPERIÊNCIA FEITA PARA SER{" "}
+                  <span className="text-khao-gold">SENTIDA</span>.
+                </>
+              }
+              className="
+                text-khao-black
+                text-[clamp(1.8rem,8vw,4rem)]
+                leading-[0.98]
+              "
             />
           </div>
         </div>
@@ -226,11 +239,19 @@ export function ExperienceSection() {
           ref={videoWrapperRef}
           className="
             relative
-            h-[58dvh]
-            w-screen
+            h-[54dvh]
+            min-h-80
+            w-[92vw]
+            max-w-none
             overflow-hidden
+            rounded-none
             will-change-transform
+
+            sm:h-[60dvh]
+            sm:w-[90vw]
+
             md:h-screen
+            md:w-screen
           "
         >
           <video
@@ -241,13 +262,16 @@ export function ExperienceSection() {
               h-full
               w-full
               object-cover
+              object-[center_center]
               will-change-transform
+
+              max-md:object-[52%_center]
             "
             autoPlay={!reducedMotion}
             loop
             muted
             playsInline
-            preload="none"
+            preload="metadata"
             poster={KHAO_ASSETS.experience.poster_experience}
             aria-hidden="true"
           >
@@ -257,6 +281,7 @@ export function ExperienceSection() {
           {/* CINEMATIC OVERLAY */}
 
           <div
+            aria-hidden="true"
             className="
               pointer-events-none
               absolute

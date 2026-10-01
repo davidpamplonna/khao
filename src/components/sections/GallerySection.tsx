@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,9 +11,10 @@ import "swiper/css";
 
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
 import Link from "next/link";
 
-import galleryItems from '@/src/data/gallery';
+import galleryItems from "@/src/data/gallery";
 
 const INSTAGRAM_URL = "https://www.instagram.com/restobarkhao/";
 
@@ -21,6 +22,21 @@ export function GallerySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const swiperRef = useRef<SwiperInstance | null>(null);
   const reducedMotion = useReducedMotion();
+
+  const revealConfigs = useMemo(
+    () => [
+      {
+        selector: "[data-gallery-title]",
+        trigger: "[data-gallery-title]",
+        start: "top 82%",
+        from: { autoAlpha: 0.15, y: 20 },
+        to: { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" },
+      },
+    ],
+    [],
+  );
+
+  useScrollReveal(sectionRef, revealConfigs);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -76,9 +92,10 @@ export function GallerySection() {
       aria-labelledby="gallery-title"
       className="overflow-hidden bg-khao-bg pb-20 pt-6 md:pb-28 md:pt-10"
     >
-        <div className="max-w-350 mb-10 mx-auto flex flex-col px-5 md:flex-row md:justify-between gap-8 sm:mb-12 sm:px-8 md:mb-16 lg:px-0 xl:flex-row xl:items-center xl:justify-between">
+      <div className="max-w-350 mb-10 mx-auto flex flex-col px-5 md:flex-row md:justify-between gap-8 sm:mb-12 sm:px-8 md:mb-16 lg:px-0 xl:flex-row xl:items-center xl:justify-between">
         <p
           id="gallery-title"
+          data-gallery-title
           className="w-80 max-w-136 khao-description  text-khao-white "
         >
           Veja quem escolheu
@@ -86,7 +103,7 @@ export function GallerySection() {
         </p>
 
         <div className="flex w-full items-center gap-3 sm:w-auto md:gap-4">
-           <Link
+          <Link
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noreferrer"
