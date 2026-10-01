@@ -118,7 +118,7 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 px-4 py-6 backdrop-blur-md sm:px-6 sm:py-10"
+      className="fixed inset-0 z-70 overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 px-4 py-6 backdrop-blur-md sm:px-6 sm:py-10"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) handleClose();
@@ -154,7 +154,7 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
             type="button"
             onClick={handleClose}
             aria-label="Fechar formulário de reserva"
-            className="flex size-10 shrink-0 items-center justify-center border border-khao-white/20 text-khao-white transition-colors hover:border-khao-gold hover:text-khao-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-khao-gold"
+            className="flex size-10 shrink-0 items-center justify-center border border-khao-white/20 text-khao-white transition-colors hover:border-khao-gold hover:text-khao-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-khao-gold"
           >
             <X size={18} aria-hidden="true" />
           </button>
@@ -178,7 +178,7 @@ export function ReservationForm({ isOpen, onClose }: ReservationFormProps) {
             <button
               type="button"
               onClick={handleClose}
-              className="mt-8 border-b border-khao-gold pb-1 text-[10px] font-medium uppercase tracking-[0.28em] text-khao-gold transition-colors hover:text-khao-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-khao-gold"
+              className="mt-8 border-b border-khao-gold pb-1 text-[10px] font-medium uppercase tracking-[0.28em] text-khao-gold transition-colors hover:text-khao-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-khao-gold"
             >
               Fechar confirmação
             </button>
