@@ -11,7 +11,6 @@ import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 import { Title } from "../ui/title";
 import { Button } from "../ui/button";
 
-const MENU_TITLE = "O difícil não é escolher. É escolher só um.";
 
 const MENU_DESCRIPTION = "Uma seleção dos sabores que definem o KHAO.";
 
@@ -19,19 +18,19 @@ const CATEGORY_CARDS = [
   {
     categoryId: "mains",
     label: "PRATOS",
-    image: KHAO_ASSETS.menu_poster.dishes,
+    image: KHAO_ASSETS.menu.menu_poster.dishes,
     alt: "Pad thai de camarão servido em bowl escuro",
   },
   {
     categoryId: "desserts",
     label: "SOBREMESAS",
-    image: KHAO_ASSETS.menu_poster.desserts,
+    image: KHAO_ASSETS.menu.menu_poster.desserts,
     alt: "Mango sticky rice com manga fresca e leite de coco",
   },
   {
     categoryId: "drinks",
     label: "DRINKS",
-    image: KHAO_ASSETS.menu_poster.drinks,
+    image: KHAO_ASSETS.menu.menu_poster.drinks,
     alt: "Drink gelado servido com gelo e especiarias",
   },
 ] as const;
@@ -49,16 +48,17 @@ export function MenuSection() {
     let media: ReturnType<typeof gsap.matchMedia> | undefined;
 
     const context = gsap.context(() => {
-      const titleWords = gsap.utils.toArray<HTMLElement>("[data-menu-word]");
+      const titleHeading = section.querySelector<HTMLElement>(
+        "[data-menu-title] h2",
+      );
 
-      if (titleWords.length) {
+      if (titleHeading) {
         gsap.fromTo(
-          titleWords,
+          titleHeading,
           { autoAlpha: 0.08, y: 18 },
           {
             autoAlpha: 1,
             y: 0,
-            stagger: 0.1,
             duration: 0.75,
             ease: "power2.out",
             scrollTrigger: {
@@ -307,7 +307,7 @@ export function MenuSection() {
           <div
             data-menu-title
             className="
-              mx-auto
+              md:mx-auto
               text-center
               md:w-170
               md:max-w-200
@@ -327,7 +327,7 @@ export function MenuSection() {
             data-menu-description
             className="
               khao-description
-              w-60
+              w-80
               leading-relaxed
               tracking-widest
             "
@@ -524,9 +524,7 @@ export function MenuSection() {
           ))}
         </div>
 
-        {/* ==========================================================
-            CTA
-            ========================================================== */}
+      {/* CTA */}
 
         <div
           className="

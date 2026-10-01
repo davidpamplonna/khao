@@ -11,21 +11,22 @@ export const KHAO_ASSETS = {
   },
 
   hero: {
-    chef: "/assets/hero/hero-khao-chef.opt.webp",
+    poster_chef: "/assets/hero/hero-khao-chef.opt.webp",
     light: "/assets/hero/khao-light.webp",
   },
 
   essence: {
-    chefPreparation: "/assets/essence/essence-chef-preparation.opt.webp",
+    chefPreparation: "/assets/essence/chef-preparation.webp",
+    cocktailPreparation: "/assets/essence/cocktail-preparation.webp",
+    dishFinishing: "/assets/essence/chef_plating_fine_dining_dish.webp",
+    wokFire: "/assets/essence/work-fire.webp",
+    restaurant_terrace: "/assets/essence/restaurant_terrace.webp",
+    restaurant_interior: "/assets/essence/restaurant_int.webp",
+    restaurant: "/assets/essence/restaurant_salon.webp",
+  },
 
-    cocktailPreparation:
-      "/assets/essence/essence-cocktail-preparation.opt.webp",
-
-    dishFinishing: "/assets/essence/essence-dish-finishing.opt.webp",
-
-    wokFire: "/assets/essence/essence-wok-fire.opt.webp",
-    restaurant:
-    "/assets/essence/restaurant.webp"
+  experience: {
+    poster_experience: "/assets/essence/poster-experiencia.webp",
   },
 
   menu: {
@@ -48,12 +49,16 @@ export const KHAO_ASSETS = {
     khao_signature: "/assets/menu/menu-khao-signature.opt.webp",
     bangkok_mule: "/assets/menu/menu-bangkok-mule.opt.webp",
     lemongrass: "/assets/menu/menu-lemongrass.opt.webp",
+
+    menu_poster: {
+      dishes: "/assets/menu/dishes.webp",
+      desserts: "/assets/menu/desserts.webp",
+      drinks: "/assets/menu/drinks.webp",
+    },
   },
 
-  menu_poster: {
-    dishes: "/assets/menu/dishes.webp",
-    desserts: "/assets/menu/desserts.webp",
-    drinks: "/assets/menu/drinks.webp",
+  cta: {
+    cta_aerial: "/assets/cta/cta-khao-aerial.webp",
   },
 
   gallery: {
@@ -64,7 +69,7 @@ export const KHAO_ASSETS = {
     Couple_sharing_Thai_dishes3:
       "/assets/gallery/Couple_sharing_Thai_dishes.webp",
     Woman_taking_mirror_selfie:
-      "/assets/gallery/Woman_taking_mirror_selfie.webp",
+      "/assets/gallery/woman_taking_mirror_selfie.webp",
     Hand_holding_Thai_iced_tea:
       "/assets/gallery/Hand_holding_Thai_iced_tea.webp",
     Friends_clinking_cocktail_glassesa:
@@ -90,11 +95,13 @@ export const KHAO_ICONS = {
     khao_elephant: "/assets/icons/khao-elephant.svg",
     khao_lotus: "/assets/icons/khao-lotus.svg",
   },
+  menu: "/assets/icons/menu.svg",
+  khao_lotus: "/assets/icons/khao-lotus.svg",
 };
 
 // VÍDEOS
 
 export const KHAO_VIDEOS = {
-  hero: "/videos/hero/intro-khao-chef.mp4",
-  experience: "/videos/experience/clip-wok-fire.mp4",
+  hero: "/videos/intro-khao-chef.mp4",
+  experience: "/videos/clip-wok-fire.mp4",
 };

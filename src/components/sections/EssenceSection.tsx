@@ -8,16 +8,18 @@ import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 import { Title } from "../ui/title";
 
-const ESSENCE_TITLE = "A Tailândia não se explica. Se sente.";
-
 const STORY_IMAGES = [
+   {
+    src: KHAO_ASSETS.essence.restaurant_terrace,
+    alt: "Terraço do KHAO com mesas, plantas e iluminação acolhedora",
+  }, 
+  {
+    src: KHAO_ASSETS.essence.restaurant_interior,
+    alt: "Interior do KHAO com mesas, plantas e iluminação acolhedora",
+  },
   {
     src: KHAO_ASSETS.essence.chefPreparation,
     alt: "Chef selecionando ervas e ingredientes frescos na cozinha",
-  },
-  {
-    src: KHAO_ASSETS.essence.cocktailPreparation,
-    alt: "Bartender preparando um coquetel com ingredientes frescos",
   },
   {
     src: KHAO_ASSETS.essence.wokFire,
@@ -26,6 +28,10 @@ const STORY_IMAGES = [
   {
     src: KHAO_ASSETS.essence.dishFinishing,
     alt: "Chef finalizando um prato tailandês com molho e ervas",
+  },
+   {
+    src: KHAO_ASSETS.essence.cocktailPreparation,
+    alt: "Bartender preparando um coquetel com ingredientes frescos",
   },
 ];
 
@@ -41,18 +47,19 @@ export function EssenceSection() {
     const context = gsap.context(() => {
       //  TÍTULO
 
-      const titleWords = gsap.utils.toArray<HTMLElement>("[data-essence-word]");
+      const title = section.querySelector<HTMLElement>(
+        "[data-essence-title] h2",
+      );
 
-      if (titleWords.length) {
-        gsap.set(titleWords, {
-          autoAlpha: 0.08,
-          y: 18,
+      if (title) {
+        gsap.set(title, {
+          autoAlpha: 0.15,
+          y: 25,
         });
 
-        gsap.to(titleWords, {
+        gsap.to(title, {
           autoAlpha: 1,
           y: 0,
-          stagger: 0.1,
           ease: "none",
           scrollTrigger: {
             trigger: "[data-essence-title]",
