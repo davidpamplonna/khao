@@ -1,46 +1,80 @@
 "use client";
 
 import Link from "next/link";
+
+import { useScrollDirection } from "@/src/hooks/use-scroll-direction";
+
 import { Logo } from "../ui/logo";
 import { NavBar } from "./navbar";
 
-import { useState, useEffect } from "react";
+const HEADER_BASE_CLASSES = `
+  fixed
+  inset-x-0
+  top-0
+  z-50
+  transition-[transform,background-color,backdrop-filter]
+  duration-500
+  ease-[cubic-bezier(0.22,1,0.36,1)]
+`;
+
+const HEADER_VISIBLE_CLASSES = "translate-y-0";
+
+const HEADER_HIDDEN_CLASSES = "-translate-y-full";
+
+const HEADER_SCROLLED_CLASSES = `
+  bg-khao-black/5
+  backdrop-blur-md
+`;
+
+const HEADER_TOP_CLASSES = "bg-transparent backdrop-blur-0";
+
+const HEADER_CONTAINER_CLASSES = `
+  container
+  mx-auto
+  flex
+  w-full
+  items-center
+  justify-between
+  px-3
+  py-5
+  md:px-10
+  md:py-7
+`;
+
+const LOGO_CLASSES = `
+  h-auto
+  w-40
+  max-md:w-65
+  max-sm:w-30
+`;
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { direction, isAtTop } = useScrollDirection();
 
-  useEffect(() => {
-    const handledScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    handledScroll();
+  const isVisible = direction !== "down";
 
-    window.addEventListener("scroll", handledScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handledScroll);
-    };
-  }, []);
+  const backgroundClass = isAtTop
+    ? HEADER_TOP_CLASSES
+    : HEADER_SCROLLED_CLASSES;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 ${
-        isScrolled ? "bg-black/20 backdrop-blur-md " : "bg-transparent"
-      }`}
+      className={`
+        ${HEADER_BASE_CLASSES}
+        ${backgroundClass}
+        ${isVisible
+          ? HEADER_VISIBLE_CLASSES
+          : HEADER_HIDDEN_CLASSES}
+      `}
     >
-      <div className="container mx-auto flex w-full items-center justify-between px-3 py-5 md:px-10 md:py-7">
-        {/* logo */}
-        <Link href={"/"}>
-          {/* <Logo /> */}
-          <Logo
-            className="
-       h-auto
-          w-40
-          max-md:w-65
-          max-sm:w-30"
-          />
+      <div className={HEADER_CONTAINER_CLASSES}>
+        <Link
+          href="/"
+          aria-label="KHAO — início"
+        >
+          <Logo className={LOGO_CLASSES} />
         </Link>
-        {/* menu */}
+
         <NavBar />
       </div>
     </header>

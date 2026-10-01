@@ -1,18 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 
 import { KHAO_ASSETS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
+import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 import { Title } from "../ui/title";
 
 const STORY_IMAGES = [
-   {
+  {
     src: KHAO_ASSETS.essence.restaurant_terrace,
     alt: "Terraço do KHAO com mesas, plantas e iluminação acolhedora",
-  }, 
+  },
   {
     src: KHAO_ASSETS.essence.restaurant_interior,
     alt: "Interior do KHAO com mesas, plantas e iluminação acolhedora",
@@ -29,7 +30,7 @@ const STORY_IMAGES = [
     src: KHAO_ASSETS.essence.dishFinishing,
     alt: "Chef finalizando um prato tailandês com molho e ervas",
   },
-   {
+  {
     src: KHAO_ASSETS.essence.cocktailPreparation,
     alt: "Bartender preparando um coquetel com ingredientes frescos",
   },
@@ -39,63 +40,35 @@ export function EssenceSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
+  const revealConfigs = useMemo(
+    () => [
+      {
+        selector: "[data-essence-title] h2",
+        trigger: "[data-essence-title]",
+        start: "top 78%",
+        from: { autoAlpha: 0.15, y: 25 },
+        to: { autoAlpha: 1, y: 0, ease: "none" },
+      },
+      {
+        selector: "[data-essence-description]",
+        trigger: "[data-essence-description-wrapper]",
+        start: "top 82%",
+        from: { autoAlpha: 0.15, y: 25 },
+        to: { autoAlpha: 1, y: 0, ease: "none" },
+        stagger: 0.15,
+      },
+    ],
+    [],
+  );
+
+  useScrollReveal(sectionRef, revealConfigs);
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
 
     if (!section || reducedMotion) return;
 
     const context = gsap.context(() => {
-      //  TÍTULO
-
-      const title = section.querySelector<HTMLElement>(
-        "[data-essence-title] h2",
-      );
-
-      if (title) {
-        gsap.set(title, {
-          autoAlpha: 0.15,
-          y: 25,
-        });
-
-        gsap.to(title, {
-          autoAlpha: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-essence-title]",
-            start: "top 78%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        });
-      }
-
-      //  TEXTOS
-
-      const descriptions = gsap.utils.toArray<HTMLElement>(
-        "[data-essence-description]",
-      );
-
-      if (descriptions.length) {
-        gsap.set(descriptions, {
-          autoAlpha: 0.15,
-          y: 25,
-        });
-
-        gsap.to(descriptions, {
-          autoAlpha: 1,
-          y: 0,
-          stagger: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-essence-description-wrapper]",
-            start: "top 82%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        });
-      }
-
       //  IMAGEM DE FUNDO
 
       const backdrop = section.querySelector<HTMLElement>(

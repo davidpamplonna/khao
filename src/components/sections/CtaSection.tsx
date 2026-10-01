@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 
 import { KHAO_ASSETS } from "@/src/config/khao-assets";
 
 import { gsap } from "@/src/lib/gsap";
+import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 
 import { ReservationButton } from "../ui/Form";
@@ -15,94 +16,70 @@ export function CtaSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
+  const revealConfigs = useMemo(
+    () => [
+      {
+        selector: ".cta-title h2",
+        trigger: () => sectionRef.current,
+        start: "top 75%",
+        from: { opacity: 0, y: 40 },
+        to: { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+      },
+      {
+        selector: ".cta-description",
+        trigger: () => sectionRef.current,
+        start: "top 75%",
+        from: { opacity: 0, y: 25 },
+        to: {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        stagger: 0.12,
+      },
+      {
+        selector: ".cta-button",
+        trigger: () => sectionRef.current,
+        start: "top 75%",
+        from: { opacity: 0, y: 20 },
+        to: { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      },
+    ],
+    [],
+  );
+
+  useScrollReveal(sectionRef, revealConfigs);
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
 
-    if (!section) return;
-
-    if (reducedMotion) return;
+    if (!section || reducedMotion) return;
 
     const ctx = gsap.context(() => {
       const imageWrapper = section.querySelector(".cta-image-wrapper");
-      const title = section.querySelector(".cta-title");
-      const descriptions = section.querySelectorAll(".cta-description");
-      const button = section.querySelector(".cta-button");
 
-      if (!imageWrapper || !title || !button) return;
+      if (!imageWrapper) return;
 
-      // Estado inicial
       gsap.set(imageWrapper, {
         opacity: 0,
         scale: 1.08,
       });
 
-      gsap.set(title, {
-        opacity: 0,
-        y: 40,
-      });
-
-      gsap.set(descriptions, {
-        opacity: 0,
-        y: 25,
-      });
-
-      gsap.set(button, {
-        opacity: 0,
-        y: 20,
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top 75%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      // Imagem + overlays entram juntos
-      tl.to(imageWrapper, {
-        opacity: 1,
-        scale: 1,
-        duration: 1.8,
-        ease: "power3.out",
-      })
-
-        // Título
-        .to(
-          title,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: "top 75%",
+            toggleActions: "play none none none",
           },
-          "-=0.9",
-        )
-
-        // Descrições
-        .to(
-          descriptions,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            stagger: 0.12,
-          },
-          "-=0.55",
-        )
-
-        // Botão
-        .to(
-          button,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.4",
-        );
+        })
+        .to(imageWrapper, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.8,
+          ease: "power3.out",
+        });
     }, section);
 
     return () => ctx.revert();
@@ -261,10 +238,10 @@ export function CtaSection() {
         >
           {/* Title */}
           <div className="cta-title">
-            <Title 
+            <Title
               title={
                 <>
-                  Venha sentir o {''}
+                  Venha sentir o {""}
                   <span className="text-khao-gold">KHAO</span>
                 </>
               }
