@@ -7,7 +7,6 @@ import { CtaSection } from "../components/sections/CtaSection";
 import { Footer } from "../components/layout/footer";
 import { siteUrl } from "@/src/lib/site";
 import { GallerySection } from "../components/sections/GallerySection";
-import { MenuSection2 } from "../components/sections/MenuSection2";
 
 const restaurantStructuredData = {
   "@context": "https://schema.org",
@@ -39,8 +38,6 @@ export default function Home() {
       <EssenceSection />
       <ExperienceSection />
       <MenuSection />
-      {/* <MenuSection2 /> */}
-      {/* <CombosSection /> */}
       <CtaSection />
       <GallerySection />
       <Footer />
