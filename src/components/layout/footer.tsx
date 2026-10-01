@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { Logo } from "../ui/logo";
 
-import { KHAO_SOCIAL } from "@/src/data/assets/image";
+import { KHAO_ICONS } from "@/src/config/khao-assets";
 
 const FOOTER_LINKS = {
   navigation: [
@@ -21,17 +21,17 @@ const SOCIAL_LINKS = [
   {
     label: "Facebook",
     href: "https://www.facebook.com/restobarkhao",
-    icon: KHAO_SOCIAL.facebook,
+    icon: KHAO_ICONS.social.facebook,
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/restobarkhao/",
-    icon: KHAO_SOCIAL.instagram,
+    icon: KHAO_ICONS.social.instagram,
   },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/pt-BR/",
-    icon: KHAO_SOCIAL.tiktok,
+    icon: KHAO_ICONS.social.tiktok,
   },
 ] as const;
 
@@ -52,7 +52,7 @@ export function Footer() {
       <div className="mx-auto flex w-full max-w-342 flex-col items-center">
         <FooterBrand />
 
-        <div className="mt-[6.7rem] grid w-full grid-cols-4 gap-10 max-md:mt-16 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:gap-12">
+        <div className="mt-[6.7rem] grid w-full  gap-10 max-md:mt-16 max-md:grid-cols-2 max-sm:grid-cols-2 max-sm:gap-12 md:grid-cols-3 lg:grid-cols-4">
           <FooterColumn title="Navegação" links={FOOTER_LINKS.navigation} />
 
           <FooterColumn title="Sobre a Khao" links={FOOTER_LINKS.about} />
@@ -61,9 +61,9 @@ export function Footer() {
 
           <SocialLinks />
         </div>
-
-        <FooterCopyright />
       </div>
+
+      <FooterCopyright />
     </footer>
   );
 }
@@ -128,7 +128,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
             href={href}
             className="
               text-[14px] 
-              tracking-[0.25em]
+              tracking-widest
               text-khao-description
               transition-all
               duration-500
@@ -238,8 +238,23 @@ function SocialIcon({ type }: SocialIconProps) {
 
 function FooterCopyright() {
   return (
-    <div className="mt-[5.6rem] w-full border-t border-white/20 pt-8 text-center">
-      <p className="text-[10px] tracking-[0.25em] text-khao-description/70">
+    <div className="mt-[5.6rem] w-full pt-8 text-center">
+      <div
+        aria-hidden="true"
+        className="flex w-full items-center gap-8 max-sm:gap-4"
+      >
+        <div className="h-px flex-1 bg-linear-to-r from-transparent via-khao-gold/60 to-khao-gold/60" />
+        <Image
+          src={KHAO_ICONS.khao_lotus}
+          alt=""
+          width={138}
+          height={77}
+          className="h-auto w-34.5 shrink-0 object-contain max-sm:w-24"
+        />
+        <div className="h-px flex-1 bg-linear-to-l from-transparent via-khao-gold/60 to-khao-gold/60" />
+      </div>
+
+      <p className="mt-6 text-[10px] tracking-[0.25em] text-khao-description/70">
         © {CURRENT_YEAR} KHAO — COZINHA TAILANDESA
       </p>
     </div>

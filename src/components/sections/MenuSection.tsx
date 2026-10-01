@@ -1,434 +1,548 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { MENU_CATEGORIES } from "@/src/data/menu";
-import { KHAO_BRAND, KHAO_ORNAMENT } from "@/src/data/assets/image";
+import { ArrowRight } from "lucide-react";
+import { useLayoutEffect, useRef } from "react";
+
+import { KHAO_ASSETS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
-import type { MenuCategory, MenuDish } from "@/src/types/menu";
+import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+
 import { Title } from "../ui/title";
 import { Button } from "../ui/button";
 
-const INITIAL_CATEGORY_ID = "starters";
 
-function getCategory(categoryId: string) {
-  return (
-    MENU_CATEGORIES.find(({ id }) => id === categoryId) ?? MENU_CATEGORIES[0]
-  );
-}
+const MENU_DESCRIPTION = "Uma seleção dos sabores que definem o KHAO.";
 
-function getDishIndex(category: MenuCategory, dishId: string) {
-  const index = category.dishes.findIndex(({ id }) => id === dishId);
-  return index < 0 ? 0 : index;
-}
+const CATEGORY_CARDS = [
+  {
+    categoryId: "mains",
+    label: "PRATOS",
+    image: KHAO_ASSETS.menu.menu_poster.dishes,
+    alt: "Pad thai de camarão servido em bowl escuro",
+  },
+  {
+    categoryId: "desserts",
+    label: "SOBREMESAS",
+    image: KHAO_ASSETS.menu.menu_poster.desserts,
+    alt: "Mango sticky rice com manga fresca e leite de coco",
+  },
+  {
+    categoryId: "drinks",
+    label: "DRINKS",
+    image: KHAO_ASSETS.menu.menu_poster.drinks,
+    alt: "Drink gelado servido com gelo e especiarias",
+  },
+] as const;
 
 export function MenuSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const numberRef = useRef<HTMLSpanElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef<number | null>(null);
-  const isAnimating = useRef(false);
-  const transitionDirection = useRef<1 | -1>(1);
-  const initialCategory = getCategory(INITIAL_CATEGORY_ID);
-  const [activeCategoryId, setActiveCategoryId] = useState(initialCategory.id);
-  const [activeDishIndex, setActiveDishIndex] = useState(
-    getDishIndex(initialCategory, "satay"),
-  );
-  const activeCategory = getCategory(activeCategoryId);
-  const dishes = activeCategory.dishes;
-  const dish = dishes[activeDishIndex] ?? dishes[0];
 
-  useLayoutEffect(() => {
-    if (!imageRef.current || !numberRef.current || !contentRef.current) return;
-    const elements = [imageRef.current, numberRef.current, contentRef.current];
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(elements, { clearProps: "all" });
-      return;
-    }
-
-    const direction = transitionDirection.current;
-    gsap.set(imageRef.current, {
-      autoAlpha: 0,
-      x: direction * 55,
-      scale: 0.94,
-    });
-    gsap.set(numberRef.current, { autoAlpha: 0, x: direction * 20 });
-    gsap.set(contentRef.current, { autoAlpha: 0, y: 18 });
-    const timeline = gsap.timeline();
-    timeline
-      .to(imageRef.current, {
-        autoAlpha: 1,
-        x: 0,
-        scale: 1,
-        duration: 0.7,
-        ease: "power3.out",
-      })
-      .to(
-        numberRef.current,
-        { autoAlpha: 1, x: 0, duration: 0.45, ease: "power3.out" },
-        "-=0.48",
-      )
-      .to(
-        contentRef.current,
-        { autoAlpha: 1, y: 0, duration: 0.55, ease: "power3.out" },
-        "-=0.3",
-      );
-
-    return () => {
-      timeline.kill();
-    };
-  }, [activeCategoryId, activeDishIndex]);
-
-  const changeDish = useCallback(
-    (direction: 1 | -1) => {
-      if (
-        isAnimating.current ||
-        !imageRef.current ||
-        !numberRef.current ||
-        !contentRef.current
-      )
-        return;
-      isAnimating.current = true;
-      transitionDirection.current = direction;
-      const nextIndex =
-        (activeDishIndex + direction + dishes.length) % dishes.length;
-      const timeline = gsap.timeline({
-        onComplete: () => {
-          setActiveDishIndex(nextIndex);
-          requestAnimationFrame(() => {
-            isAnimating.current = false;
-          });
-        },
-      });
-      timeline
-        .to(imageRef.current, {
-          autoAlpha: 0,
-          x: direction * -55,
-          scale: 0.94,
-          duration: 0.35,
-          ease: "power2.in",
-        })
-        .to(
-          numberRef.current,
-          {
-            autoAlpha: 0,
-            x: direction * -20,
-            duration: 0.25,
-            ease: "power2.in",
-          },
-          "-=0.25",
-        )
-        .to(
-          contentRef.current,
-          { autoAlpha: 0, y: -12, duration: 0.3, ease: "power2.in" },
-          "-=0.22",
-        );
-    },
-    [activeDishIndex, dishes.length],
-  );
-
-  const changeCategory = useCallback(
-    (category: MenuCategory) => {
-      if (
-        category.id === activeCategoryId ||
-        isAnimating.current ||
-        !imageRef.current ||
-        !numberRef.current ||
-        !contentRef.current
-      )
-        return;
-      isAnimating.current = true;
-      transitionDirection.current = 1;
-      const elements = [
-        imageRef.current,
-        numberRef.current,
-        contentRef.current,
-      ];
-      gsap
-        .timeline({
-          onComplete: () => {
-            setActiveCategoryId(category.id);
-            setActiveDishIndex(0);
-            requestAnimationFrame(() => {
-              isAnimating.current = false;
-            });
-          },
-        })
-        .to(elements, {
-          autoAlpha: 0,
-          y: -18,
-          duration: 0.3,
-          stagger: 0.04,
-          ease: "power2.in",
-        });
-    },
-    [activeCategoryId, setActiveCategoryId],
-  );
-
-  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    touchStartX.current = event.clientX;
-    event.currentTarget.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (touchStartX.current === null) return;
-    const delta = event.clientX - touchStartX.current;
-    touchStartX.current = null;
-    event.currentTarget.releasePointerCapture(event.pointerId);
-    if (Math.abs(delta) >= 50) changeDish(delta < 0 ? 1 : -1);
-  };
-
-  const handlePointerCancel = () => {
-    touchStartX.current = null;
-  };
+  const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    if (
-      !section ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        section.querySelectorAll("[data-menu-reveal]"),
-        { autoAlpha: 0, y: 28 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 75%", once: true },
-        },
-      );
-      gsap.fromTo(
-        section.querySelector("[data-menu-stage]"),
-        { autoAlpha: 0, scale: 0.96, y: 30 },
-        {
-          autoAlpha: 1,
-          scale: 1,
-          y: 0,
-          duration: 1.1,
-          delay: 0.15,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 70%", once: true },
-        },
-      );
-    }, section);
-    return () => context.revert();
-  }, []);
 
-  const previousDish =
-    dishes[(activeDishIndex - 1 + dishes.length) % dishes.length];
-  const nextDish = dishes[(activeDishIndex + 1) % dishes.length];
+    if (!section || reducedMotion) return;
+
+    let media: ReturnType<typeof gsap.matchMedia> | undefined;
+
+    const context = gsap.context(() => {
+      const titleHeading = section.querySelector<HTMLElement>(
+        "[data-menu-title] h2",
+      );
+
+      if (titleHeading) {
+        gsap.fromTo(
+          titleHeading,
+          { autoAlpha: 0.08, y: 18 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.75,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "[data-menu-title]",
+              start: "top 78%",
+              once: true,
+            },
+          },
+        );
+      }
+
+      const descriptionWords = gsap.utils.toArray<HTMLElement>(
+        "[data-menu-description-word]",
+      );
+
+      if (descriptionWords.length) {
+        gsap.fromTo(
+          descriptionWords,
+          { autoAlpha: 0.15, y: 22 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.07,
+            duration: 0.65,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "[data-menu-description]",
+              start: "top 82%",
+              once: true,
+            },
+          },
+        );
+      }
+
+      const cards = gsap.utils.toArray<HTMLElement>("[data-menu-card]");
+      const cardsContainer =
+        section.querySelector<HTMLElement>("[data-menu-cards]");
+
+      if (cards.length && cardsContainer) {
+        media = gsap.matchMedia();
+
+        media.add("(min-width: 1024px)", () => {
+          const cardsTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: cardsContainer,
+              start: "top 78%",
+              once: true,
+            },
+          });
+
+          cards.forEach((card, index) => {
+            const image = card.querySelector<HTMLElement>(
+              "[data-menu-card-image]",
+            );
+            const label = card.querySelector<HTMLElement>(
+              "[data-menu-card-label]",
+            );
+            const position = index * 0.42;
+
+            cardsTimeline.fromTo(
+              card,
+              { autoAlpha: 0, rotateY: 24, y: 22 },
+              {
+                autoAlpha: 1,
+                rotateY: 0,
+                y: 0,
+                duration: 1.1,
+                ease: "power2.out",
+              },
+              position,
+            );
+
+            if (image) {
+              cardsTimeline.fromTo(
+                image,
+                { scale: 1.1 },
+                { scale: 1, duration: 1.25, ease: "power2.out" },
+                position,
+              );
+            }
+
+            if (label) {
+              cardsTimeline.fromTo(
+                label,
+                { autoAlpha: 0, y: 16 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.65,
+                  ease: "power2.out",
+                },
+                position + 0.4,
+              );
+            }
+          });
+        });
+
+        media.add("(max-width: 1023px)", () => {
+          cards.forEach((card) => {
+            const image = card.querySelector<HTMLElement>(
+              "[data-menu-card-image]",
+            );
+            const label = card.querySelector<HTMLElement>(
+              "[data-menu-card-label]",
+            );
+
+            const cardTimeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: card,
+                start: "top 88%",
+                once: true,
+              },
+            });
+
+            cardTimeline.fromTo(
+              card,
+              { autoAlpha: 0, y: 38 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 1,
+                ease: "power2.out",
+              },
+            );
+
+            if (image) {
+              cardTimeline.fromTo(
+                image,
+                { scale: 1.09 },
+                { scale: 1, duration: 1.15, ease: "power2.out" },
+                0,
+              );
+            }
+
+            if (label) {
+              cardTimeline.fromTo(
+                label,
+                { autoAlpha: 0, y: 14 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.6,
+                  ease: "power2.out",
+                },
+                0.35,
+              );
+            }
+          });
+        });
+      }
+
+      const button = section.querySelector<HTMLElement>("[data-menu-button]");
+
+      if (button) {
+        gsap.fromTo(
+          button,
+          { autoAlpha: 0, y: 28 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: button,
+              start: "top 92%",
+              once: true,
+            },
+          },
+        );
+      }
+    }, section);
+
+    return () => {
+      media?.revert();
+      context.revert();
+    };
+  }, [reducedMotion]);
 
   return (
     <section
       id="cardapio"
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden bg-khao-bg py-20 sm:py-24 md:py-28"
+      className="
+        relative
+        isolate
+        overflow-hidden
+        bg-khao-bg
+        px-[clamp(1.1rem,3.45vw,3.5rem)]
+        pt-[clamp(5.5rem,7vw,8rem)]
+        pb-[clamp(5rem,8vw,8rem)]
+      "
     >
-      {/* ORNAMENT TOP*/}
+      {/*           BACKGROUND GLOW
+       */}
+
       <Image
-        src={KHAO_ORNAMENT.khao_light}
-        width={530}
-        height={530}
-        alt="Decoração"
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-14 -top-20 z-0 w-180 select-none opacity-30 sm:-left-24 sm:-top-20 sm:w-100 md:-left-20 md:-top-16 md:w-120 lg:-left-12 lg:w-132 "
-      />
-      <Image
-        src={KHAO_ORNAMENT.khao_pattern}
+        src={KHAO_ASSETS.brand.khao_glow}
         width={200}
         height={200}
-        alt="Decoração"
+        alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -right-3 top-0 z-0 w-32 select-none opacity-70 sm:w-40 md:-right-4 md:w-48 lg:w-52"
+        className="
+          pointer-events-none
+          absolute
+          left-0
+          top-[20%]
+          w-56
+          md:w-126
+        "
       />
-      {/* ORNAMENT LATERAIS */}
+      {/*  BACKGROUND SMOKE */}
+
       <Image
-        src={KHAO_BRAND.khao_glow}
+        src={KHAO_ASSETS.brand.khao_smok}
         width={200}
         height={200}
-        alt="Decoração"
+        alt=""
         aria-hidden="true"
-        // pointer-events-none absolute left-0 top-[50%] w-126 -translate-x-1/2 -translate-y-1/2 select-none opacity-90 md:w-96 lg:w-md
-        className="pointer-events-none absolute left-0 top-[30%] w-56 md:w-126 "
+        className="
+          pointer-events-none
+          absolute
+          -right-4
+          top-[50%]
+          w-56
+          md:w-126
+        "
       />
-      <Image
-        src={KHAO_BRAND.khao_smok}
-        width={200}
-        height={200}
-        alt="Decoração"
-        aria-hidden="true"
-        // pointer-events-none absolute left-0 top-[50%] w-126 -translate-x-1/2 -translate-y-1/2 select-none opacity-90 md:w-96 lg:w-md
-        className="pointer-events-none absolute -right-4 top-[50%] w-56 md:w-126 "
-      />
-      {/* CONTEINER */}
-      <div className="relative z-10 mx-auto flex min-h-180 w-full max-w-350 flex-col px-3 md:px-0">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-70 md:max-w-150">
+
+      <div className="relative z-10 mx-auto w-full max-w-376">
+        {/* HEADER */}
+
+        <div
+          className="
+            relative
+            z-10
+            mx-auto
+            flex
+            w-full
+            max-w-350
+            flex-col
+            gap-20
+          "
+        >
+          {/* TÍTULO */}
+
+          <div
+            data-menu-title
+            className="
+              md:mx-auto
+              text-center
+              md:w-170
+              md:max-w-200
+            "
+          >
             <Title
-              eyebrow="02 / Menu"
-              title="O difícil não é escolher. É escolher "
-              highlight="só um."
+              ornament="Menu"
+              title="O difícil não é escolher.
+É escolher só um."
+              className="text-[clamp(2rem,5vw,4rem)]"
             />
           </div>
-          <p className="w-full max-w-60 khao-description leading-relaxed md:mb-2">
-            Uma seleção dos sabores que definem o KHAO
+
+          {/* DESCRIÇÃO */}
+
+          <p
+            data-menu-description
+            className="
+              khao-description
+              w-80
+              leading-relaxed
+              tracking-widest
+            "
+            aria-label={MENU_DESCRIPTION}
+          >
+            {MENU_DESCRIPTION.split(" ").map((word, index) => (
+              <span
+                key={`${word}-${index}`}
+                data-menu-description-word
+                aria-hidden="true"
+                className="mr-[0.28em] inline-block"
+              >
+                {word}
+              </span>
+            ))}
           </p>
         </div>
-        <nav
-          data-menu-reveal
-          aria-label="Categorias do cardápio"
-          className="mt-14 flex flex-wrap gap-x-7 gap-y-4  border-b pb-6 border-khao-white/15 pt-5 md:mt-20 md:justify-center md:gap-x-10"
+
+      {/* CARDS */}
+
+        <div
+          data-menu-cards
+          className="
+            mt-11
+            grid
+            grid-cols-1
+            gap-x-8
+            gap-y-14
+            sm:grid-cols-2
+            lg:mt-[clamp(2.8rem,5.4vw,5.25rem)]
+            lg:grid-cols-3
+            lg:gap-y-20
+          "
+          style={{
+            perspective: "1400px",
+          }}
         >
-          {MENU_CATEGORIES.map((category) => {
-            const isActive = category.id === activeCategoryId;
-            return (
-              <button
-                key={category.id}
-                type="button"
-                onClick={() => changeCategory(category)}
-                aria-pressed={isActive}
-                className="group relative text-[10px] font-medium uppercase tracking-[0.18em] md:text-xs"
+          {CATEGORY_CARDS.map((category) => (
+            <button
+              key={category.categoryId}
+              type="button"
+              data-menu-card
+              className="
+                group
+                relative
+                block
+                aspect-[0.82]
+                w-full
+                cursor-pointer
+                bg-transparent
+                p-0
+                text-left
+                text-inherit
+                focus-visible:outline-none
+              "
+            >
+             {/* IMAGE */}
+
+              <span
+                className="
+                  absolute
+                  inset-0
+                  overflow-hidden
+                  bg-khao-black
+                "
               >
-                <span
-                  className={`mr-2 transition-colors ${isActive ? "text-khao-gold" : "text-khao-white/70 group-hover:text-khao-gold"}`}
-                >
-                  {category.number}
-                </span>
-                <span
-                  className={`transition-colors ${isActive ? "text-khao-gold" : "text-khao-white/70 group-hover:text-khao-gold"}`}
-                >
-                  {category.label}
-                </span>
-                <span
-                  className={`absolute -bottom-2 left-0 h-px bg-khao-gold transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                <Image
+                  src={category.image}
+                  alt={category.alt}
+                  fill
+                  data-menu-card-image
+                  sizes="
+                    (max-width: 639px) 92vw,
+                    (max-width: 1023px) 45vw,
+                    30vw
+                  "
+                  className="
+                    object-cover
+                    transition-all
+                    duration-700
+                    group-hover:scale-[1.045]
+                    group-hover:brightness-[1.08]
+                    group-focus-visible:scale-[1.045]
+                    group-focus-visible:brightness-[1.08]
+                    motion-reduce:transition-none
+                  "
                 />
-              </button>
-            );
-          })}
-        </nav>
-        <div
-          data-menu-stage
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerCancel}
-          className="relative mt-12 grid flex-1 touch-pan-y select-none items-center gap-8 md:mt-14 md:min-h-105 md:grid-cols-[0.8fr_1.4fr_0.8fr] md:gap-6 lg:min-h-115"
-        >
-          <PreviewDish dish={previousDish} alignment="left" />
-          <article className="order-first flex min-w-0 flex-col items-center text-center md:order-0">
-            <span
-              ref={numberRef}
-              className="mb-1 font-khao-title text-4xl text-khao-gold md:text-5xl "
-            >
-              {dish.number}
-            </span>
-            <div
-              ref={imageRef}
-              className="relative flex aspect-[3/2] w-full max-w-120 items-center justify-center will-change-transform"
-            >
-              <Image
-                src={dish.image}
-                alt={dish.alt}
-                width={720}
-                height={480}
-                priority
-                className="h-full w-full object-contain"
-                sizes="(max-width: 767px) 92vw, 480px"
-              />
-            </div>
-            <div
-              ref={contentRef}
-              aria-live="polite"
-              className="flex min-w-0 flex-col items-center will-change-transform"
-            >
-              <h3 className="mt-4 max-w-90 font-khao-title text-[clamp(1.5rem,3vw,2.4rem)] font-bold uppercase leading-[1.05] tracking-[0.18em] text-khao-gold">
-                {dish.name}
-              </h3>
-              <p className="mt-3 max-w-72 text-xs font-medium leading-[1.55] text-khao-description md:text-sm">
-                {dish.description}
-              </p>
-            </div>
-          </article>
-          <PreviewDish dish={nextDish} alignment="right" />
+
+                {/* BORDER */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    border
+                    border-transparent
+                    transition-colors
+                    duration-500
+                    group-hover:border-khao-gold/40
+                    group-focus-visible:border-khao-gold/60
+                  "
+                />
+
+                {/* GRADIENT */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    bottom-0
+                    top-[45%]
+                    bg-linear-to-b
+                    from-transparent
+                    to-khao-black/45
+                    opacity-70
+                    transition-opacity
+                    duration-500
+                    group-hover:opacity-100
+                    group-focus-visible:opacity-100
+                  "
+                />
+
+                {/* ARROW */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    right-4
+                    top-4
+                    grid
+                    size-11
+                    translate-y-1
+                    place-items-center
+                    rounded-full
+                    border
+                    border-khao-white/50
+                    bg-khao-black/30
+                    text-khao-white
+                    opacity-0
+                    transition
+                    duration-300
+                    group-hover:translate-y-0
+                    group-hover:opacity-100
+                    group-focus-visible:translate-y-0
+                    group-focus-visible:opacity-100
+                    max-[700px]:translate-y-0
+                    max-[700px]:opacity-100
+                    motion-reduce:transition-none
+                  "
+                >
+                  <ArrowRight size={20} strokeWidth={1.3} />
+                </span>
+
+                {/* FOCUS */}
+
+                <span
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    outline
+                    outline-transparent
+                    outline-offset-[5px]
+                    group-focus-visible:outline-khao-gold
+                  "
+                />
+              </span>
+
+            {/*     CATEGORY LABEL
+ */}
+
+              <span
+                data-menu-card-label
+                className="
+                  absolute
+                  bottom-[-0.40em]
+                  right-0
+                  whitespace-nowrap
+                  text-right
+                  font-khao-title
+                  text-[clamp(2.2rem,5vw,3rem)]
+                  font-bold
+                  leading-none
+                  text-khao-gold
+                  drop-shadow-2xl
+                "
+              >
+                {category.label}
+              </span>
+            </button>
+          ))}
         </div>
+
+      {/* CTA */}
+
         <div
-          data-menu-reveal
-          className="mt-12 flex flex-col-reverse gap-8 md:flex-row items-center justify-between md:mt-8"
+          className="
+            mt-[clamp(5rem,9vw,8.5rem)]
+            flex
+            justify-center
+          "
         >
-          <Button type="button" variant="secondary" href="#menu-completo">
+          <Button
+            data-menu-button
+            type="button"
+            variant="secondary"
+            href="#pdf"
+          >
             Ver menu completo
           </Button>
-          {/* <a
-            href="#menu-completo"
-            className="text-xs font-bold text-khao-white transition-colors hover:text-khao-gold md:text-sm"
-          >
-            Ver menu completo <span aria-hidden="true">→</span>
-          </a> */}
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => changeDish(-1)}
-              aria-label="Prato anterior"
-              className="group flex size-9 items-center justify-center rounded-full border border-khao-white text-khao-white transition-all duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black"
-            >
-              <ArrowLeft size={16} strokeWidth={1.5} />
-            </button>
-            <button
-              type="button"
-              onClick={() => changeDish(1)}
-              aria-label="Próximo prato"
-              className="group flex size-9 items-center justify-center rounded-full bg-khao-white text-khao-black transition-all duration-300 hover:bg-khao-gold"
-            >
-              <ArrowRight size={16} strokeWidth={1.5} />
-            </button>
-          </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function PreviewDish({
-  dish,
-  alignment,
-}: {
-  dish: MenuDish;
-  alignment: "left" | "right";
-}) {
-  const isRight = alignment === "right";
-  return (
-    <article
-      data-menu-side
-      aria-label={`${dish.name}, prato lateral`}
-      className={`hidden min-w-0 md:flex md:flex-col ${isRight ? "items-end text-right" : "items-start"}`}
-    >
-      <span className="mb-1 font-khao-title text-3xl leading-none text-khao-gold md:text-4xl">
-        {dish.number}
-      </span>
-      <div className="flex h-35 w-full max-w-55 items-center justify-center lg:h-40 lg:max-w-60">
-        <Image
-          src={dish.image}
-          alt={dish.alt}
-          width={420}
-          height={280}
-          className="h-auto max-h-full w-full object-contain opacity-55 grayscale-20 transition-opacity duration-500"
-          sizes="(max-width: 1023px) 18vw, 15vw"
-        />
-      </div>
-      <div className="mt-3 max-w-48 md:mt-5 lg:max-w-52">
-        <h3 className="font-khao-title text-base font-bold uppercase tracking-[0.16em] text-khao-white/60">
-          {dish.name}
-        </h3>
-        <p className="mt-2 text-[10px] leading-[1.45] text-khao-description/60 md:text-xs">
-          {dish.description}
-        </p>
-      </div>
-    </article>
   );
 }

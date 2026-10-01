@@ -3,11 +3,11 @@ import { Hero } from "../components/sections/hero";
 import { EssenceSection } from "../components/sections/EssenceSection";
 import { ExperienceSection } from "../components/sections/ExperienceSection";
 import { MenuSection } from "../components/sections/MenuSection";
-import { CombosSection } from "../components/sections/CombosSection";
 import { CtaSection } from "../components/sections/CtaSection";
-import { GallerySection } from "../components/ui/GallerySection";
 import { Footer } from "../components/layout/footer";
 import { siteUrl } from "@/src/lib/site";
+import { GallerySection } from "../components/sections/GallerySection";
+import { MenuSection2 } from "../components/sections/MenuSection2";
 
 const restaurantStructuredData = {
   "@context": "https://schema.org",
@@ -39,7 +39,8 @@ export default function Home() {
       <EssenceSection />
       <ExperienceSection />
       <MenuSection />
-      <CombosSection />
+      {/* <MenuSection2 /> */}
+      {/* <CombosSection /> */}
       <CtaSection />
       <GallerySection />
       <Footer />

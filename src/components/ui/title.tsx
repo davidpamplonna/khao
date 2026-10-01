@@ -1,68 +1,38 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ReactNode } from "react";
 
-type TitleProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
-  eyebrow?: string;
+type TitleProps = {
   title: ReactNode;
-  highlight?: ReactNode;
-  eyebrowClassName?: string;
-  titleClassName?: string;
-  highlightClassName?: string;
+  ornament?: ReactNode;
+  className?: string;
 };
 
 export function Title({
-  eyebrow,
   title,
-  highlight,
-  className,
-  eyebrowClassName,
-  titleClassName,
-  highlightClassName,
-  ...props
+  ornament,
+  className = "",
 }: TitleProps) {
-  const wrapperClasses = [
-    "flex flex-col",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const eyebrowClasses = [
-    "font-khao-description text-xs font-medium uppercase tracking-[0.2em] text-khao-gold md:text-sm",
-    eyebrowClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const titleClasses = [
-    "font-khao-title text-[clamp(2rem,5vw,4rem)] uppercase leading-[0.92]",
-    titleClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const highlightClasses = [
-    "text-khao-gold",
-    highlightClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <div className={wrapperClasses} {...props}>
-      {eyebrow && (
-        <span className={eyebrowClasses}>
-          {eyebrow}
-        </span>
+    <div className={`flex flex-col ${className}`}>
+      {ornament && (
+        <div className="flex items-center justify-center gap-6 mb-3">
+          <span
+            aria-hidden="true"
+            className="h-px w-50 bg-linear-to-r from-transparent to-khao-gold/80"
+          />
+
+          <span className="font-khao-description text-sm uppercase tracking-[0.2em] text-khao-gold">
+            {ornament}
+          </span>
+
+          <span
+            aria-hidden="true"
+            className="h-px w-50 rotate-180 bg-linear-to-r from-transparent to-khao-gold/80"
+          />
+        </div>
       )}
 
-      <h2 className={titleClasses}>
+      <h2 className="font-khao-title uppercase leading-[1.02]">
         {title}
-
-        {highlight && (
-          <span className={highlightClasses}>
-            {highlight}
-          </span>
-        )}
       </h2>
     </div>
   );

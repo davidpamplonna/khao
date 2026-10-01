@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { KHAO_LOGO } from "@/src/data/assets/image";
+import { KHAO_ASSETS } from "@/src/config/khao-assets";
 
 type LogoProps = {
   className?: string;
@@ -9,7 +9,7 @@ type LogoProps = {
 export function Logo({ className }: LogoProps) {
   return (
     <Image
-      src={KHAO_LOGO}
+      src={KHAO_ASSETS.brand.logo}
       alt="KHAO"
       width={160}
       height={160}
