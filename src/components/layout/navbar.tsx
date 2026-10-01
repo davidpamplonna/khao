@@ -1,7 +1,7 @@
 "use client";
 
-import { NavLinks, SocialLinks } from "@/src/data/assets/menu";
-import { KHAO_Menu } from "@/src/data/assets/image";
+import { NavLinks, SocialLinks } from "@/src/data/navbar";
+import { KHAO_ICONS } from "@/src/config/khao-assets";
 import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
@@ -100,7 +100,7 @@ export function NavBar() {
           Menu
         </span>
         <Image
-          src={KHAO_Menu}
+          src={KHAO_ICONS.menu}
           alt="Menu Hamburguer"
           width={30}
           height={30}

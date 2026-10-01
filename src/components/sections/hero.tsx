@@ -1,7 +1,6 @@
 "use client";
 
-import { KHAO_VIDEO } from "@/src/data/assets/video";
-import { KHAO_HERO } from "@/src/data/assets/image";
+import {KHAO_VIDEOS, KHAO_ASSETS} from "@/src/config/khao-assets";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { ReservationButton } from "../ui/Form";
@@ -224,14 +223,14 @@ export function Hero() {
         muted
         playsInline
         preload="metadata"
-        poster={KHAO_HERO.hero_khao_chef}
+        poster={KHAO_ASSETS.hero.poster_chef}
       >
-        <source src={KHAO_VIDEO} type="video/mp4" />
+        <source src={KHAO_VIDEOS.hero} type="video/mp4" />
       </video>
       {/* overlay */}
       <div ref={overlayRef} className=" absolute inset-0 bg-khao-black/55" />
       {/* bottom gradient */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,9,0.25),rgba(10,10,9,0.05)_45%,rgba(10,10,9,0.9))]" />
+      {/* <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,9,0.25),rgba(10,10,9,0.05)_45%,rgba(10,10,9,0.9))]" /> */}
 
       {/* content */}
       <div className="relative z-10 flex w-full max-w-350 flex-col items-center px-6 text-center md:px-10 gap-8">
@@ -248,7 +247,7 @@ export function Hero() {
           </div>
           <h1 ref={titleRef}>
             <Image
-              src={KHAO_HERO.khao_light}
+              src={KHAO_ASSETS.hero.light}
               alt="Nome KHAO"
               width={600}
               height={600}

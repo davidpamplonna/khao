@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { Logo } from "../ui/logo";
 
-import { KHAO_SOCIAL, KHAO_STORY_ICON } from "@/src/data/assets/image";
+import { KHAO_ICONS } from "@/src/config/khao-assets";
 
 const FOOTER_LINKS = {
   navigation: [
@@ -21,17 +21,17 @@ const SOCIAL_LINKS = [
   {
     label: "Facebook",
     href: "https://www.facebook.com/restobarkhao",
-    icon: KHAO_SOCIAL.facebook,
+    icon: KHAO_ICONS.social.facebook,
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/restobarkhao/",
-    icon: KHAO_SOCIAL.instagram,
+    icon: KHAO_ICONS.social.instagram,
   },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/pt-BR/",
-    icon: KHAO_SOCIAL.tiktok,
+    icon: KHAO_ICONS.social.tiktok,
   },
 ] as const;
 
@@ -245,7 +245,7 @@ function FooterCopyright() {
       >
         <div className="h-px flex-1 bg-linear-to-r from-transparent via-khao-gold/60 to-khao-gold/60" />
         <Image
-          src={KHAO_STORY_ICON.khao_lotus}
+          src={KHAO_ICONS.khao_lotus}
           alt=""
           width={138}
           height={77}

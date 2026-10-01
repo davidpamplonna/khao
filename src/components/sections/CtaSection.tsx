@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 
-import { KHAO_CTA } from "@/src/data/assets/image";
+import { KHAO_ASSETS } from "@/src/config/khao-assets";
 
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
@@ -150,7 +150,7 @@ export function CtaSection() {
           "
         >
           <Image
-            src={KHAO_CTA.cta}
+            src={KHAO_ASSETS.cta.cta_aerial}
             alt="Prato da cozinha tailandesa contemporânea do KHAO"
             fill
             sizes="(max-width: 1400px) 100vw, 1400px"
@@ -175,8 +175,8 @@ export function CtaSection() {
               h-[22%]
               min-h-32
               bg-linear-to-b
-              from-[#0a0a09]
-              via-[#0a0a09]/70
+              from-khao-black
+              via-khao-dark/70
               to-transparent
             "
           />
@@ -193,8 +193,8 @@ export function CtaSection() {
               h-[38%]
               min-h-48
               bg-linear-to-t
-              from-[#0a0a09]
-              via-[#0a0a09]/80
+              from-khao-black
+              via-khao-dark/80
               to-transparent
             "
           />
@@ -210,8 +210,8 @@ export function CtaSection() {
               z-10
               w-[20%]
               bg-linear-to-r
-              from-[#0a0a09]
-              via-[#0a0a09]/70
+              from-khao-black
+              via-khao-dark/70
               to-transparent
             "
           />
@@ -227,8 +227,8 @@ export function CtaSection() {
               z-10
               w-[20%]
               bg-linear-to-l
-              from-[#0a0a09]
-              via-[#0a0a09]/70
+              from-khao-black
+              via-khao-dark/70
               to-transparent
             "
           />
@@ -261,17 +261,6 @@ export function CtaSection() {
         >
           {/* Title */}
           <div className="cta-title">
-            {/* <Title
-              id="khao-cta-title"
-              title={
-                <>
-                  Venha sentir o <span className="text-khao-gold">KHAO</span>.
-                </>
-              }
-              titleClassName="
-                text-[clamp(2.25rem,6vw,5rem)]
-              "
-            /> */}
             <Title 
               title={
                 <>

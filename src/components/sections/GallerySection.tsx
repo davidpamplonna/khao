@@ -76,26 +76,16 @@ export function GallerySection() {
       aria-labelledby="gallery-title"
       className="overflow-hidden bg-khao-bg pb-20 pt-6 md:pb-28 md:pt-10"
     >
-      {/* <div className="mx-auto mb-10 flex max-w-350 flex-col gap-8 px-5 sm:mb-12 sm:px-8 md:mb-16 lg:px-9 xl:flex-row xl:items-center xl:justify-between xl:gap-10"> */}
         <div className="max-w-350 mb-10 mx-auto flex flex-col px-5 md:flex-row md:justify-between gap-8 sm:mb-12 sm:px-8 md:mb-16 lg:px-0 xl:flex-row xl:items-center xl:justify-between">
         <p
           id="gallery-title"
-          className="w-60 max-w-136 font-khao-description text-[clamp(1.02rem,1.8vw,1.2rem)] font-light leading-[1.35] tracking-[-0.03em] text-khao-white "
+          className="w-80 max-w-136 khao-description  text-khao-white "
         >
           Veja quem escolheu
           <br className="hidden sm:block" /> viver a experiência KHAO.
         </p>
 
         <div className="flex w-full items-center gap-3 sm:w-auto md:gap-4">
-          {/* <Link
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-12 min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-full border border-khao-white/80 px-4 text-xs text-khao-white transition-colors hover:bg-khao-white hover:text-khao-bg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:h-14 sm:flex-none sm:px-6 sm:text-sm md:h-16 md:px-8 md:text-base lg:px-9 lg:text-lg"
-          >
-            Ver no Instagram
-          </Link> */}
-
            <Link
             href={INSTAGRAM_URL}
             target="_blank"
