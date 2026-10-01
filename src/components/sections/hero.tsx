@@ -334,11 +334,7 @@ export function Hero() {
               height={600}
               priority
               quality={90}
-              sizes="
-                (max-width: 640px) 180px,
-                (max-width: 1024px) 440px,
-                500px
-              "
+              sizes="(max-width: 640px) 180px, (max-width: 1024px) 440px, 500px"
               className="h-auto w-70 md:w-60 lg:w-150"
             />
           </h1>

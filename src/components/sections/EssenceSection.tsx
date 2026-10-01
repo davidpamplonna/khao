@@ -260,11 +260,7 @@ export function EssenceSection() {
                 src={src}
                 alt={alt}
                 fill
-                sizes="
-                  (max-width: 768px) 86vw,
-                  (min-width: 90.5rem) 76rem,
-                  84vw
-                "
+                sizes="(max-width: 768px) 86vw, (min-width: 90.5rem) 76rem, 84vw"
                 className="object-cover"
               />
             </figure>
