@@ -58,8 +58,50 @@ export function MenuModal({
     activeIndex: 0,
     visitedIndices: [0],
   });
+  const [isClosing, setIsClosing] = useState(false);
+  const isClosingRef = useRef(false);
   const { activeIndex, visitedIndices } = navigation;
   const menuVideo = KHAO_VIDEOS.menu[category];
+
+  const handleClose = useCallback(() => {
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
+
+    if (reducedMotion) {
+      onClose();
+      return;
+    }
+
+    const backdrop = backdropRef.current;
+    const content = contentRef.current;
+
+    if (!backdrop || !content) {
+      onClose();
+      return;
+    }
+
+    setIsClosing(true);
+    videoRef.current?.pause();
+    gsap.killTweensOf([backdrop, content]);
+    gsap
+      .timeline({ onComplete: onClose })
+      .to(content, {
+        autoAlpha: 0,
+        y: 28,
+        scale: 0.985,
+        duration: 0.32,
+        ease: "power2.in",
+      })
+      .to(
+        backdrop,
+        {
+          autoAlpha: 0,
+          duration: 0.38,
+          ease: "power2.in",
+        },
+        "-=0.18",
+      );
+  }, [onClose, reducedMotion]);
 
   useVideoVisibility(
     videoRef,
@@ -121,8 +163,10 @@ export function MenuModal({
     setScrollLocked(true);
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isClosingRef.current) return;
+
       if (event.key === "Escape") {
-        onClose();
+        handleClose();
       } else if (event.key === "ArrowDown" || event.key === "ArrowRight") {
         event.preventDefault();
         goNext();
@@ -142,7 +186,7 @@ export function MenuModal({
       document.removeEventListener("keydown", handleKeyDown);
       previousFocusRef.current?.focus();
     };
-  }, [goNext, goPrevious, onClose]);
+  }, [goNext, goPrevious, handleClose]);
 
   useLayoutEffect(() => {
     const modal = modalRef.current;
@@ -281,6 +325,8 @@ export function MenuModal({
     let cooldownTimer: number | null = null;
 
     const handleWheel = (event: WheelEvent) => {
+      if (isClosingRef.current) return;
+
       const delta =
         Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ? event.deltaX
@@ -380,12 +426,15 @@ export function MenuModal({
       data-lenis-prevent
       data-lenis-prevent-wheel
       data-lenis-prevent-touch
-      className="fixed inset-0 z-100 overflow-hidden overscroll-none"
+      inert={isClosing}
+      className={`fixed inset-0 z-100 overflow-hidden overscroll-none ${
+        isClosing ? "pointer-events-none" : ""
+      }`}
     >
       <div
         ref={backdropRef}
         className="absolute inset-0 bg-khao-black"
-        onClick={onClose}
+        onClick={handleClose}
       >
         <video
           ref={videoRef}
@@ -415,7 +464,7 @@ export function MenuModal({
         <button
           ref={closeButtonRef}
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           aria-label="Fechar menu"
           className="absolute right-5 top-5 z-40 grid size-10 place-items-center rounded-full border border-khao-gold/70 text-khao-white transition-colors duration-300 hover:bg-khao-gold hover:text-khao-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:right-8 sm:top-7 lg:right-10 lg:top-7"
         >
