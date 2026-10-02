@@ -27,16 +27,6 @@ export const MENU_CATEGORIES = [
         alt: "Tom Yum Goong com camarões e ervas aromáticas",
       },
       {
-        id: "spring-rolls",
-        number: "03",
-        name: "SPRING ROLLS",
-        description:
-          "Rolinho crocante de vegetais frescos, ervas tailandesas e molho agridoce da casa.",
-        image: KHAO_ASSETS.menu.spring_rolls,
-        alt: "Spring Rolls crocantes com vegetais e ervas",
-      },
-
-      {
         id: "pad-thai",
         number: "01",
         name: "PAD THAI DE CAMARÃO",
@@ -72,15 +62,6 @@ export const MENU_CATEGORIES = [
         image: KHAO_ASSETS.menu.massaman_curry,
         alt: "Massaman Curry servido em cerâmica escura",
       },
-      {
-        id: "khao-pad",
-        number: "05",
-        name: "KHAO PAD",
-        description:
-          "Arroz jasmine salteado no wok com camarões, ovo, vegetais frescos e o perfume das ervas tailandesas.",
-        image: KHAO_ASSETS.menu.khao_pad,
-        alt: "Khao Pad servido em prato escuro",
-      },
     ],
   },
 
@@ -99,23 +80,33 @@ export const MENU_CATEGORIES = [
         alt: "Mango Sticky Rice com manga fresca e leite de coco",
       },
       {
-        id: "thai-coconut",
-        number: "02",
-        name: "THAI COCONUT",
-        description:
-          "Creme delicado de coco, frutas tropicais e crocante de coco tostado.",
-        image: KHAO_ASSETS.menu.thai_coconut,
-        alt: "Sobremesa de coco com frutas tropicais",
-      },
-      {
         id: "khao-chocolate",
-        number: "03",
+        number: "02",
         name: "KHAO CHOCOLATE",
         description:
           "Chocolate intenso, coco tostado e notas aromáticas de especiarias.",
         image: KHAO_ASSETS.menu.khao_chocolate,
         alt: "Sobremesa de chocolate com coco tostado",
       },
+      {
+        id: "khanom-mo-kaeng",
+        number: "03",
+        name: "Khanom Mo Kaeng",
+        description:
+          "Pudim tailandês assado de abóbora kabocha e leite de coco, textura sedosa e aroma de pandan, finalizado com coco tostado.",
+        image: KHAO_ASSETS.menu.khanom_mo_kaeng,
+        alt: "Sobremesa de coco com frutas tropicais",
+      },
+      {
+        id: "caramelized-banana",
+        number: "04",
+        name: "BANANA CARAMELIZADA",
+        description:
+          "Banana caramelizada em creme de coco, finalizada com sorvete de coco e coco tostado.",
+        image: KHAO_ASSETS.menu.caramelized_banana,
+        alt: "Sobremesa de banana caramelizada com creme de coco",
+      }
+
     ],
   },
 

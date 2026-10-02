@@ -10,10 +10,11 @@ import {
   useState,
 } from "react";
 
-import { KHAO_ASSETS, KHAO_VIDEOS } from "@/src/config/khao-assets";
+import { KHAO_VIDEOS } from "@/src/config/khao-assets";
 import { MENU_CATEGORIES } from "@/src/data/menu";
 import { gsap } from "@/src/lib/gsap";
 import { setScrollLocked } from "@/src/motion/scroll-lock";
+import { useVideoVisibility } from "@/src/motion/use-video-visibility";
 import type { MenuDish } from "@/src/types/menu";
 
 type CategoryId = (typeof MENU_CATEGORIES)[number]["id"];
@@ -44,6 +45,7 @@ export function MenuModal({
   const backdropRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const hasCenteredCardRef = useRef(false);
@@ -57,6 +59,13 @@ export function MenuModal({
     visitedIndices: [0],
   });
   const { activeIndex, visitedIndices } = navigation;
+  const menuVideo = KHAO_VIDEOS.menu[category];
+
+  useVideoVisibility(
+    videoRef,
+    !reducedMotion,
+    menuVideo.video,
+  );
 
   const categoryLabel =
     MENU_CATEGORIES.find((item) => item.id === category)?.label ?? "MENU";
@@ -379,13 +388,13 @@ export function MenuModal({
         onClick={onClose}
       >
         <video
-          src={KHAO_VIDEOS.menu[category]}
-          poster={KHAO_ASSETS.hero.poster_chef}
-          autoPlay={!reducedMotion}
+          ref={videoRef}
+          src={menuVideo.video}
+          poster={menuVideo.poster}
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="none"
           aria-hidden="true"
           className="pointer-events-none absolute size-full object-cover object-[center_42%] md:translate-x-[-20vw] md:scale-[1.25]"
         />
@@ -452,7 +461,7 @@ export function MenuModal({
                       alt={item.alt}
                       fill
                       quality={75}
-                      priority={index === activeIndex}
+                      preload={index === activeIndex}
                       sizes="(max-width: 767px) 82vw, (max-width: 1280px) 36vw, 31rem"
                       className="pointer-events-none object-contain"
                       draggable={false}
@@ -485,7 +494,7 @@ export function MenuModal({
             onClick={goPrevious}
             disabled={activeIndex === 0}
             aria-label="Prato anterior"
-            className="grid size-12 place-items-center rounded-full border border-khao-white/75 text-khao-white transition-colors duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-[3.25rem]"
+            className="grid size-12 place-items-center rounded-full border border-khao-white/75 text-khao-white transition-colors duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-13"
           >
             <ArrowLeft size={21} strokeWidth={1.3} />
           </button>
@@ -495,7 +504,7 @@ export function MenuModal({
             onClick={goNext}
             disabled={activeIndex === items.length - 1}
             aria-label="Próximo prato"
-            className="grid size-12 place-items-center rounded-full bg-khao-white text-khao-black transition-colors duration-300 hover:bg-khao-gold disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-[3.25rem]"
+            className="grid size-12 place-items-center rounded-full bg-khao-white text-khao-black transition-colors duration-300 hover:bg-khao-gold disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-13"
           >
             <ArrowRight size={21} strokeWidth={1.3} />
           </button>

@@ -26,29 +26,28 @@ export const KHAO_ASSETS = {
   },
 
   experience: {
-    poster_experience: "/assets/essence/poster-experiencia.webp",
+    poster_experience: "/assets/experiencia/poster-experiencia.webp",
   },
 
   menu: {
     // pratos
-    green_curry: "/assets/menu/menu-green-curry.opt.webp",
-    khao_pad: "/assets/menu/menu-khao-pad.opt.webp",
-    massaman_curry: "/assets/menu/menu-massaman-curry.opt.webp",
-    pad_kra_pao: "/assets/menu/menu-pad-kra-pao.opt.webp",
-    pad_thai_de_camarao: "/assets/menu/menu-pad-thai-de-camarao.opt.webp",
-    tom_yum_goong: "/assets/menu/menu-tom-yum-goong.opt.webp",
-    satay: "/assets/menu/menu-satay.opt.webp",
-    spring_rolls: "/assets/menu/menu-spring-rolls.opt.webp",
+    green_curry: "/assets/menu/dishes-green-curry.webp",
+    massaman_curry: "/assets/menu/dishes-massaman-curry.webp",
+    pad_kra_pao: "/assets/menu/dishes-pad-kra-pao.webp",
+    pad_thai_de_camarao: "/assets/menu/dishes-pad-thai-de-camarao.webp",
+    tom_yum_goong: "/assets/menu/dishes-tom-yum-goong.webp",
+    satay: "/assets/menu/dishes-satay.webp",
 
     // sobremessas
-    thai_coconut: "/assets/menu/menu-thai-coconut.opt.webp",
-    khao_chocolate: "/assets/menu/menu-khao-chocolate.opt.webp",
-    mango_sticky_rice: "/assets/menu/menu-mango-sticky-rice.opt.webp",
+    khanom_mo_kaeng: "/assets/menu/desserts-khanom-mo-kaeng.webp",
+    khao_chocolate: "/assets/menu/desserts-khao-chocolate.webp",
+    mango_sticky_rice: "/assets/menu/desserts-mango-sticky-rice.webp",
+    caramelized_banana: "/assets/menu/desserts-caramelized-banana.webp",
 
     // DRINKS
-    khao_signature: "/assets/menu/menu-khao-signature.opt.webp",
-    bangkok_mule: "/assets/menu/menu-bangkok-mule.opt.webp",
-    lemongrass: "/assets/menu/menu-lemongrass.opt.webp",
+    khao_signature: "/assets/menu/drinks-khao-signature.opt.webp",
+    bangkok_mule: "/assets/menu/drinks-bangkok-mule.opt.webp",
+    lemongrass: "/assets/menu/drinks-lemongrass.opt.webp",
 
     menu_poster: {
       dishes: "/assets/menu/dishes.webp",
@@ -105,8 +104,18 @@ export const KHAO_VIDEOS = {
   hero: "/videos/intro-khao-chef.mp4",
   experience: "/videos/clip-wok-fire.mp4",
   menu: {
-    starters: "/videos/clip-menu.mp4",
-    desserts: "/videos/clip-wok-fire.mp4",
-    drinks: "/videos/intro-khao-chef.mp4",
+    starters:{
+      video:"/videos/dishes.mp4",
+      poster: "/assets/menu/poster-video-dishes.webp"
+    },
+    
+    desserts:{
+     video: "/videos/desserts.mp4", 
+     poster: "/assets/menu/poster-video-desserts.webp"
+    },
+    drinks: {
+      video: "/videos/drinks.mp4",
+      poster: "/assets/menu/poster-video-drinks.webp"
+    }
   },
 };

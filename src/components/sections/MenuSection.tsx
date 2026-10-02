@@ -536,10 +536,10 @@ export function MenuSection() {
                       src={category.image}
                       alt={category.alt}
                       fill
-                      quality={100}
+                      quality={75}
                       loading="lazy"
                       data-menu-card-image
-                      sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, 30vw"
+                      sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, (max-width: 1600px) 30vw, 31rem"
                       className="
                         object-cover
                         transition-[filter]

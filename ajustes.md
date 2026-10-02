@@ -81,31 +81,42 @@ retornar 404 em compartilhamentos e crawlers.
 3. Inspecionar o HTML renderizado e testar os cards em validadores de
    compartilhamento.
 
-### 4. Reduzir o peso de imagens e controlar vídeos fora da tela — P2
+### 4. Reduzir o peso de imagens e controlar vídeos fora da tela — P2 (OK)
 
-**Evidência:** há imagens WebP com aproximadamente 3,6–5,3 MB, por exemplo
-`restaurant_terrace.webp` (5,32 MB), `cta-khao-aerial.webp` (4,47 MB) e
-`restaurant_int.webp` (4,21 MB). Os três vídeos têm cerca de 1,9–2,8 MB.
-Hero e Experience usam autoplay e `preload="metadata"` sem pausa explícita ao
-saírem da viewport.
+**Evidência original:** havia imagens WebP com aproximadamente 3,6–5,3 MB,
+por exemplo `restaurant_terrace.webp` (5,32 MB), `cta-khao-aerial.webp`
+(4,47 MB) e `restaurant_int.webp` (4,21 MB). Os três vídeos têm cerca de
+1,9–2,8 MB. Hero e Experience usavam autoplay e `preload="metadata"` sem pausa
+explícita ao saírem da viewport.
 
 **Impacto:** imagens grandes aumentam o tempo de transferência ao serem
 solicitadas; vídeos podem consumir CPU, bateria e dados móveis mesmo quando o
 visitante não está vendo a seção.
 
-**Passo a passo:**
+**Implementado:**
 
-1. Medir dimensões e bytes efetivamente transferidos por viewport com Lighthouse
-   e a aba Network, priorizando LCP e rede móvel.
-2. Redimensionar os originais às dimensões máximas de exibição e gerar AVIF/WebP
-   com qualidade visual validada; não apenas trocar a extensão.
-3. Revisar `sizes`, `priority` e carregamento lazy para que só imagens críticas
-   sejam prioritárias.
-4. Pausar vídeos fora da viewport com `IntersectionObserver` e retomar quando
-   visíveis.
-5. Respeitar `prefers-reduced-motion`, oferecer poster adequado e avaliar
-   formatos/bitrates menores para conexões móveis.
-6. Comparar Lighthouse e transferência total antes/depois.
+1. Redimensionadas e recomprimidas 22 imagens WebP: as imagens largas foram
+   limitadas a 1920 px, as fotos da galeria a 576 px e os posters foram
+   recomprimidos sem ampliar suas dimensões.
+2. O conjunto passou de 44.668.136 bytes para 1.749.126 bytes
+   (−42.919.010 bytes, 96,1% menos no disco). Exemplos: `restaurant_terrace.webp`
+   passou de 5.575.754 para 323.526 bytes; `cta-khao-aerial.webp`, de 4.683.474
+   para 131.894 bytes; e `restaurant_int.webp`, de 4.417.712 para 173.300 bytes.
+3. Ajustados `sizes` para os limites visuais dos cards e da galeria; a imagem
+   inicial do carrossel do modal é a única pré-carregada. O logo do Hero usa
+   `preload` com dimensões responsivas.
+4. Os vídeos do Hero, Experience e modal agora usam `IntersectionObserver`:
+   pausam fora da viewport ou com a aba oculta e retomam quando visíveis. O
+   modal também sincroniza a reprodução ao trocar a categoria.
+5. Autoplay decorativo fica desativado com `prefers-reduced-motion`; vídeos
+   usam `preload="none"` e posters. Corrigido o caminho do poster da seção
+   Experience para o arquivo existente.
+
+**Pendente de medição em navegador/produção:** não foi possível comparar
+Lighthouse e bytes transferidos por viewport nesta alteração. Os três MP4s
+continuam entre 1,9 MB e 2,8 MB; a transcodificação de bitrate/formato deve ser
+avaliada com os vídeos finais e validação visual/auditiva antes de substituir
+os arquivos atuais.
 
 ## Melhorias de acessibilidade e confiabilidade
 
