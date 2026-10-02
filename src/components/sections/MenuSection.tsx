@@ -521,25 +521,35 @@ export function MenuSection() {
                     overflow-hidden
                   "
                 >
-                  <Image
-                    src={category.image}
-                    alt={category.alt}
-                    fill
-                    quality={100}
-                    loading="lazy"
-                    data-menu-card-image
-                    sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, 30vw"
+                  <span
                     className="
-                      object-cover
-                      transition-all
+                      absolute
+                      inset-0
+                      transition-transform
                       duration-700
-                      group-hover:scale-[1.04]
-                      group-hover:brightness-[1.08]
-                      group-focus-visible:scale-[1.04]
-                      group-focus-visible:brightness-[1.08]
+                      group-hover:scale-[1.1]
+                      group-focus-visible:scale-[1.1]
                       motion-reduce:transition-none
                     "
-                  />
+                  >
+                    <Image
+                      src={category.image}
+                      alt={category.alt}
+                      fill
+                      quality={100}
+                      loading="lazy"
+                      data-menu-card-image
+                      sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, 30vw"
+                      className="
+                        object-cover
+                        transition-[filter]
+                        duration-700
+                        group-hover:brightness-[1.08]
+                        group-focus-visible:brightness-[1.08]
+                        motion-reduce:transition-none
+                      "
+                    />
+                  </span>
 
                   {/* BORDER */}
 

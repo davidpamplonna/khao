@@ -2,7 +2,7 @@ import { KHAO_ASSETS } from "@/src/config/khao-assets";
 
 import { MenuCategory } from "@/src/types/menu";
 
-export const MENU_CATEGORIES: MenuCategory[] = [
+export const MENU_CATEGORIES = [
   {
     id: "starters",
     number: "01",
@@ -153,4 +153,4 @@ export const MENU_CATEGORIES: MenuCategory[] = [
       },
     ],
   },
-];
+] as const satisfies MenuCategory[];

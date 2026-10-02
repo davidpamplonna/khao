@@ -10,8 +10,10 @@ import {
   useState,
 } from "react";
 
+import { KHAO_ASSETS, KHAO_VIDEOS } from "@/src/config/khao-assets";
 import { MENU_CATEGORIES } from "@/src/data/menu";
 import { gsap } from "@/src/lib/gsap";
+import { setScrollLocked } from "@/src/motion/scroll-lock";
 import type { MenuDish } from "@/src/types/menu";
 
 type CategoryId = (typeof MENU_CATEGORIES)[number]["id"];
@@ -30,7 +32,6 @@ type MenuModalProps = {
 type MenuNavigationState = {
   activeIndex: number;
   visitedIndices: number[];
-  isNewCard: boolean;
 };
 
 export function MenuModal({
@@ -54,9 +55,8 @@ export function MenuModal({
   const [navigation, setNavigation] = useState<MenuNavigationState>({
     activeIndex: 0,
     visitedIndices: [0],
-    isNewCard: false,
   });
-  const { activeIndex, visitedIndices, isNewCard } = navigation;
+  const { activeIndex, visitedIndices } = navigation;
 
   const categoryLabel =
     MENU_CATEGORIES.find((item) => item.id === category)?.label ?? "MENU";
@@ -67,14 +67,11 @@ export function MenuModal({
         const nextIndex = Math.max(0, Math.min(items.length - 1, index));
         if (nextIndex === current.activeIndex) return current;
 
-        const isNewCard = !current.visitedIndices.includes(nextIndex);
-
         return {
           activeIndex: nextIndex,
-          visitedIndices: isNewCard
+          visitedIndices: !current.visitedIndices.includes(nextIndex)
             ? [...current.visitedIndices, nextIndex]
             : current.visitedIndices,
-          isNewCard,
         };
       });
     },
@@ -86,14 +83,11 @@ export function MenuModal({
       const nextIndex = Math.min(items.length - 1, current.activeIndex + 1);
       if (nextIndex === current.activeIndex) return current;
 
-      const isNewCard = !current.visitedIndices.includes(nextIndex);
-
       return {
         activeIndex: nextIndex,
-        visitedIndices: isNewCard
+        visitedIndices: !current.visitedIndices.includes(nextIndex)
           ? [...current.visitedIndices, nextIndex]
           : current.visitedIndices,
-        isNewCard,
       };
     });
   }, [items.length]);
@@ -102,18 +96,20 @@ export function MenuModal({
     setNavigation((current) => ({
       ...current,
       activeIndex: Math.max(0, current.activeIndex - 1),
-      isNewCard: false,
     }));
   }, []);
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement as HTMLElement | null;
     const originalOverflow = document.body.style.overflow;
+    const originalRootOverflow = document.documentElement.style.overflow;
     const focusFrame = window.requestAnimationFrame(() => {
       closeButtonRef.current?.focus();
     });
 
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    setScrollLocked(true);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -132,6 +128,8 @@ export function MenuModal({
     return () => {
       window.cancelAnimationFrame(focusFrame);
       document.body.style.overflow = originalOverflow;
+      document.documentElement.style.overflow = originalRootOverflow;
+      setScrollLocked(false);
       document.removeEventListener("keydown", handleKeyDown);
       previousFocusRef.current?.focus();
     };
@@ -179,9 +177,6 @@ export function MenuModal({
     if (!cards.length) return;
 
     const previousIndex = previousActiveIndexRef.current;
-    const direction =
-      previousIndex === null || activeIndex > previousIndex ? 1 : -1;
-
     previousActiveIndexRef.current = activeIndex;
 
     const tweens: ReturnType<typeof gsap.to>[] = [];
@@ -189,45 +184,17 @@ export function MenuModal({
     cards.forEach((card, index) => {
       const distance = Math.abs(index - activeIndex);
 
-      if (!visitedIndices.includes(index)) {
-        gsap.set(card, {
-          autoAlpha: 0,
-          scale: 1,
-          y: 0,
-          zIndex: 0,
-          pointerEvents: "none",
-        });
-        return;
-      }
-
       const targetState = {
-        autoAlpha: distance === 0 ? 1 : distance === 1 ? 0.68 : 0.32,
-        scale: distance === 0 ? 1 : distance === 1 ? 0.88 : 0.76,
+        autoAlpha: distance === 0 ? 1 : distance === 1 ? 0.5 : 0,
+        scale: distance === 0 ? 1 : distance === 1 ? 0.62 : 0.46,
         rotateY: index < activeIndex ? 8 : index > activeIndex ? -8 : 0,
         y: 0,
         zIndex: distance === 0 ? 2 : 1,
-        pointerEvents: "auto" as const,
+        pointerEvents: distance <= 1 ? ("auto" as const) : ("none" as const),
       };
 
       if (reducedMotion) {
         gsap.set(card, { ...targetState, rotateY: 0 });
-        return;
-      }
-
-      if (index === activeIndex && isNewCard && previousIndex !== null) {
-        tweens.push(
-          gsap.fromTo(
-            card,
-            {
-              autoAlpha: 0,
-              y: window.innerHeight * 0.7 * direction,
-              scale: 0.9,
-              zIndex: 2,
-              pointerEvents: "auto",
-            },
-            { ...targetState, duration: 0.95, ease: "power3.out" },
-          ),
-        );
         return;
       }
 
@@ -249,7 +216,7 @@ export function MenuModal({
     return () => {
       tweens.forEach((tween) => tween.kill());
     };
-  }, [activeIndex, isNewCard, reducedMotion, visitedIndices]);
+  }, [activeIndex, reducedMotion, visitedIndices]);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
@@ -266,7 +233,8 @@ export function MenuModal({
       if (!card) return;
 
       const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const targetX = -(cardCenter - viewport.clientWidth / 2);
+      const focusPoint = viewport.clientWidth / 2;
+      const targetX = -(cardCenter - focusPoint);
       const minX = viewport.clientWidth - track.scrollWidth;
       const x = Math.max(minX, Math.min(0, targetX));
 
@@ -400,77 +368,59 @@ export function MenuModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="menu-modal-title"
-      className="fixed inset-0 z-100 overflow-hidden"
+      data-lenis-prevent
+      data-lenis-prevent-wheel
+      data-lenis-prevent-touch
+      className="fixed inset-0 z-100 overflow-hidden overscroll-none"
     >
       <div
         ref={backdropRef}
-        className="absolute inset-0 bg-khao-black/90 backdrop-blur-md"
+        className="absolute inset-0 bg-khao-black"
         onClick={onClose}
-      />
+      >
+        <video
+          src={KHAO_VIDEOS.menu[category]}
+          poster={KHAO_ASSETS.hero.poster_chef}
+          autoPlay={!reducedMotion}
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          className="pointer-events-none absolute size-full object-cover object-[center_42%] md:translate-x-[-20vw] md:scale-[1.25]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,8,7,0.28)_0%,rgba(8,8,7,0.42)_34%,rgba(8,8,7,0.72)_58%,rgba(8,8,7,0.88)_100%)]" />
+        <div className="absolute inset-y-0 right-0 hidden w-[64vw] border-l border-khao-white/5 bg-khao-black/25 backdrop-blur-lg md:block" />
+        <div className="absolute inset-0 bg-khao-black/25 backdrop-blur-sm md:hidden" />
+      </div>
 
       <div
         ref={contentRef}
-        className="relative z-10 flex h-full w-full flex-col bg-khao-surface"
+        className="absolute inset-0 z-10"
         onClick={(event) => event.stopPropagation()}
       >
-        <header className="flex shrink-0 items-center justify-between px-5 py-5 sm:px-8 sm:py-7 lg:px-12">
-          <div>
-            <span className="block font-khao-title text-[0.65rem] uppercase tracking-[0.35em] text-khao-gold">
-              Menu
-            </span>
-            <h2
-              id="menu-modal-title"
-              className="mt-1 font-khao-title text-[clamp(1.5rem,3vw,2.5rem)] font-bold uppercase leading-none text-khao-black"
-            >
-              {categoryLabel}
-            </h2>
-          </div>
+        <h2 id="menu-modal-title" className="sr-only">
+          {categoryLabel}
+        </h2>
 
-          <button
-            ref={closeButtonRef}
-            type="button"
-            onClick={onClose}
-            aria-label="Fechar menu"
-            className="grid size-11 shrink-0 place-items-center rounded-full border border-khao-black/15 transition-colors duration-300 hover:border-khao-gold hover:bg-khao-black hover:text-khao-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold"
-          >
-            <X size={20} strokeWidth={1.3} />
-          </button>
-        </header>
+        <button
+          ref={closeButtonRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Fechar menu"
+          className="absolute right-5 top-5 z-40 grid size-10 place-items-center rounded-full border border-khao-gold/70 text-khao-white transition-colors duration-300 hover:bg-khao-gold hover:text-khao-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:right-8 sm:top-7 lg:right-10 lg:top-7"
+        >
+          <X size={19} strokeWidth={1.3} />
+        </button>
 
-        <div className="flex shrink-0 items-center justify-between px-5 sm:px-8 lg:px-12">
-          <p className="font-khao-title text-xs uppercase tracking-[0.25em] text-khao-black/45">
-            {String(activeIndex + 1).padStart(2, "0")} /{" "}
-            {String(items.length).padStart(2, "0")}
-          </p>
+        <p
+          aria-live="polite"
+          className="absolute right-[8vw] top-[12vh] z-20 font-khao-title text-3xl text-khao-white/75 md:right-[8vw] md:top-[12vh] md:text-4xl"
+        >
+          {String(activeIndex + 1).padStart(2, "0")}
+        </p>
 
-          <div className="flex items-center gap-2">
-            {items.map((item, index) => (
-              <button
-                key={item.id}
-                type="button"
-                aria-label={`Ir para ${item.name}`}
-                aria-current={index === activeIndex ? "true" : undefined}
-                onClick={() => goTo(index)}
-                className="h-1 rounded-full bg-khao-black/15 transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold"
-                style={{ width: index === activeIndex ? "2.5rem" : "0.5rem" }}
-              >
-                <span className="sr-only">{item.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4">
-          <button
-            type="button"
-            onClick={goPrevious}
-            disabled={activeIndex === 0}
-            aria-label="Prato anterior"
-            className="absolute left-3 top-1/2 z-30 hidden -translate-y-1/2 place-items-center rounded-full border border-khao-black/15 bg-khao-surface/90 text-khao-black shadow-xl transition-all duration-300 hover:border-khao-gold hover:bg-khao-black hover:text-khao-white disabled:pointer-events-none disabled:opacity-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold md:grid md:size-12 lg:left-6"
-          >
-            <ArrowLeft size={19} strokeWidth={1.2} />
-          </button>
-
+        <main className="absolute inset-0 flex items-center overflow-hidden md:left-auto md:right-0 md:w-[64vw]">
           <div
             className="h-full w-full overflow-hidden touch-none"
             onPointerDown={handlePointerDown}
@@ -480,14 +430,14 @@ export function MenuModal({
           >
             <div
               ref={trackRef}
-              className="flex w-max items-center gap-5 px-[11vw] sm:gap-7 sm:px-[20vw] lg:gap-10 lg:px-[25vw]"
+              className="flex h-full w-max items-center gap-[6vw] px-[9vw] md:gap-[4vw] md:px-[calc((64vw-clamp(17rem,36vw,31rem))/2)]"
             >
               {items.map((item, index) => (
                 <article
                   key={item.id}
                   data-menu-modal-card
                   aria-hidden={!visitedIndices.includes(index)}
-                  className="relative w-[min(86vw,38rem,48vh)] select-none sm:w-[min(82vw,42rem,58vh)] lg:w-[min(58vw,74vh)]"
+                  className="relative w-[82vw] shrink-0 select-none md:w-[clamp(17rem,36vw,31rem)]"
                   onClick={() => {
                     if (draggedRef.current) {
                       draggedRef.current = false;
@@ -496,81 +446,60 @@ export function MenuModal({
                     goTo(index);
                   }}
                 >
-                  <div className="relative aspect-[1.45] w-full overflow-hidden rounded-3xl bg-[#f3efe9] shadow-[0_26px_52px_rgba(19,15,10,0.14)]">
+                  <div className="relative aspect-[1.45] w-full">
                     <Image
                       src={item.image}
                       alt={item.alt}
                       fill
-                      quality={100}
+                      quality={75}
                       priority={index === activeIndex}
-                      sizes="(max-width: 639px) 86vw, (max-width: 1023px) 82vw, 74vh"
-                      className="pointer-events-none object-contain p-3 sm:p-4"
+                      sizes="(max-width: 767px) 82vw, (max-width: 1280px) 36vw, 31rem"
+                      className="pointer-events-none object-contain"
                       draggable={false}
                     />
-                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-khao-black/50 via-transparent to-transparent" />
-                    <span className="absolute left-5 top-5 font-khao-title text-xs uppercase tracking-[0.25em] text-khao-white/80">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
                   </div>
 
-                  <div className="flex flex-col items-start justify-between gap-3 pt-4 sm:flex-row sm:items-end sm:gap-5 sm:pt-5">
-                    <div>
-                      <h3 className="font-khao-title text-[clamp(1.4rem,4vw,2.8rem)] font-bold leading-[0.95] text-khao-black">
-                        {item.name}
-                      </h3>
-                      <p className="mt-2 max-w-sm text-xs leading-relaxed tracking-wide text-khao-black/55 sm:mt-3 sm:text-sm [@media(max-height:500px)]:hidden">
-                        {item.description}
-                      </p>
-                    </div>
-                    <span className="shrink-0 font-khao-title text-base font-medium text-khao-gold sm:text-lg">
-                      {item.price}
-                    </span>
+                  <div className="mx-auto max-w-xl pt-1 text-center sm:pt-3">
+                    <h3 className="font-khao-title text-[clamp(2rem,4.2vw,3.5rem)] font-bold uppercase leading-[0.95] tracking-[0.16em] text-khao-gold">
+                      {item.name}
+                    </h3>
+                    <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed tracking-wide text-khao-white/85 sm:mt-5 sm:text-base md:text-lg">
+                      {item.description}
+                    </p>
+                    {item.price && (
+                      <span className="sr-only">Preço: {item.price}</span>
+                    )}
                   </div>
                 </article>
               ))}
             </div>
           </div>
+        </main>
+
+        <nav
+          aria-label="Navegação dos pratos"
+          className="absolute bottom-[4vh] left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 md:left-[68vw]"
+        >
+          <button
+            type="button"
+            onClick={goPrevious}
+            disabled={activeIndex === 0}
+            aria-label="Prato anterior"
+            className="grid size-12 place-items-center rounded-full border border-khao-white/75 text-khao-white transition-colors duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-[3.25rem]"
+          >
+            <ArrowLeft size={21} strokeWidth={1.3} />
+          </button>
 
           <button
             type="button"
             onClick={goNext}
             disabled={activeIndex === items.length - 1}
             aria-label="Próximo prato"
-            className="absolute right-3 top-1/2 z-30 hidden -translate-y-1/2 place-items-center rounded-full border border-khao-black/15 bg-khao-surface/90 text-khao-black shadow-xl transition-all duration-300 hover:border-khao-gold hover:bg-khao-black hover:text-khao-white disabled:pointer-events-none disabled:opacity-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold md:grid md:size-12 lg:right-6"
+            className="grid size-12 place-items-center rounded-full bg-khao-white text-khao-black transition-colors duration-300 hover:bg-khao-gold disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-[3.25rem]"
           >
-            <ArrowRight size={19} strokeWidth={1.2} />
+            <ArrowRight size={21} strokeWidth={1.3} />
           </button>
-        </div>
-
-        <footer className="flex shrink-0 items-center justify-between gap-5 px-5 pb-6 sm:px-8 sm:pb-8 lg:px-12">
-          <span className="hidden text-[0.65rem] uppercase tracking-[0.25em] text-khao-black/40 sm:block">
-            Arraste para explorar
-          </span>
-
-          <div className="ml-auto flex items-center gap-3">
-            <button
-              type="button"
-              onClick={goPrevious}
-              disabled={activeIndex === 0}
-              aria-label="Item anterior"
-              className="grid size-10 place-items-center rounded-full border border-khao-black/15 transition-colors duration-300 hover:border-khao-gold disabled:opacity-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold md:hidden"
-            >
-              <ArrowLeft size={17} strokeWidth={1.2} />
-            </button>
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={activeIndex === items.length - 1}
-              aria-label="Próximo item"
-              className="grid size-10 place-items-center rounded-full border border-khao-black/15 transition-colors duration-300 hover:border-khao-gold disabled:opacity-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold md:hidden"
-            >
-              <ArrowRight size={17} strokeWidth={1.2} />
-            </button>
-            <span className="hidden font-khao-title text-xs uppercase tracking-[0.2em] text-khao-black/40 md:block">
-              Scroll / Drag
-            </span>
-          </div>
-        </footer>
+        </nav>
       </div>
     </div>
   );

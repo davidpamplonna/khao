@@ -104,4 +104,9 @@ export const KHAO_ICONS = {
 export const KHAO_VIDEOS = {
   hero: "/videos/intro-khao-chef.mp4",
   experience: "/videos/clip-wok-fire.mp4",
+  menu: {
+    starters: "/videos/clip-menu.mp4",
+    desserts: "/videos/clip-wok-fire.mp4",
+    drinks: "/videos/intro-khao-chef.mp4",
+  },
 };
