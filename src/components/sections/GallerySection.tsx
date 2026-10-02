@@ -175,7 +175,7 @@ export function GallerySection() {
                   src={item.src}
                   alt={item.alt}
                   fill
-                  sizes="(min-width: 1600px) 250px, (min-width: 1280px) 22vw, (min-width: 1024px) 28vw, (min-width: 768px) 33vw, (min-width: 640px) 44vw, (min-width: 480px) 72vw, 80vw"
+                  sizes="(min-width: 1600px) 20vw, (min-width: 1280px) 25vw, (min-width: 1024px) 30vw, (min-width: 768px) 38vw, (min-width: 640px) 48vw, (min-width: 480px) 76vw, 90vw"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
               </figure>
