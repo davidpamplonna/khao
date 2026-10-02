@@ -7,6 +7,7 @@ import { useLayoutEffect, useRef } from "react";
 import { KHAO_ASSETS, KHAO_VIDEOS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
+import { useVideoVisibility } from "@/src/motion/use-video-visibility";
 
 import { Button } from "../ui/button";
 import { ReservationButton } from "../ui/Form";
@@ -25,6 +26,8 @@ export function Hero() {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const reducedMotion = useReducedMotion();
+
+  useVideoVisibility(videoRef, !reducedMotion);
 
   useLayoutEffect(() => {
     const hero = heroRef.current;
@@ -250,11 +253,10 @@ export function Hero() {
           object-cover
           will-change-transform
         "
-        autoPlay={!reducedMotion}
         loop
         muted
         playsInline
-        preload="metadata"
+        preload="none"
         poster={KHAO_ASSETS.hero.poster_chef}
         aria-hidden="true"
       >
@@ -332,13 +334,9 @@ export function Hero() {
               alt="KHAO"
               width={600}
               height={600}
-              priority
-              quality={90}
-              sizes="
-                (max-width: 640px) 180px,
-                (max-width: 1024px) 440px,
-                500px
-              "
+              preload
+              quality={75}
+              sizes="(max-width: 767px) 280px, (max-width: 1023px) 240px, 600px"
               className="h-auto w-70 md:w-60 lg:w-150"
             />
           </h1>

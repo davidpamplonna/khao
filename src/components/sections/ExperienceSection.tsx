@@ -6,6 +6,7 @@ import { KHAO_ASSETS, KHAO_VIDEOS } from "@/src/config/khao-assets";
 import { gsap } from "@/src/lib/gsap";
 import { useReducedMotion } from "@/src/motion/use-reduced-motion";
 import { useScrollReveal } from "@/src/motion/use-scroll-reveal";
+import { useVideoVisibility } from "@/src/motion/use-video-visibility";
 
 import { Title } from "../ui/title";
 
@@ -15,6 +16,8 @@ export function ExperienceSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const reducedMotion = useReducedMotion();
+
+  useVideoVisibility(videoRef, !reducedMotion);
 
   const revealConfigs = useMemo(
     () => [
@@ -267,11 +270,10 @@ export function ExperienceSection() {
 
               max-md:object-[52%_center]
             "
-            autoPlay={!reducedMotion}
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="none"
             poster={KHAO_ASSETS.experience.poster_experience}
             aria-hidden="true"
           >
