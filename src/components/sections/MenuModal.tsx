@@ -9,8 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-
-import { KHAO_VIDEOS } from "@/src/config/khao-assets";
+import {KHAO_VIDEO} from "@/src/data/video";
 import { MENU_CATEGORIES } from "@/src/data/menu";
 import { gsap } from "@/src/lib/gsap";
 import { setScrollLocked } from "@/src/motion/scroll-lock";
@@ -61,7 +60,7 @@ export function MenuModal({
   const [isClosing, setIsClosing] = useState(false);
   const isClosingRef = useRef(false);
   const { activeIndex, visitedIndices } = navigation;
-  const menuVideo = KHAO_VIDEOS.menu[category];
+  const menuVideo = KHAO_VIDEO.menu[category];
 
   const handleClose = useCallback(() => {
     if (isClosingRef.current) return;
@@ -543,7 +542,7 @@ export function MenuModal({
             onClick={goPrevious}
             disabled={activeIndex === 0}
             aria-label="Prato anterior"
-            className="grid size-12 place-items-center rounded-full border border-khao-white/75 text-khao-white transition-colors duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-13"
+            className="grid size-12 place-items-center rounded-full border border-khao-white/75 text-khao-white transition-colors duration-300 hover:border-khao-gold hover:bg-khao-gold hover:text-khao-black disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-10"
           >
             <ArrowLeft size={21} strokeWidth={1.3} />
           </button>
@@ -553,7 +552,7 @@ export function MenuModal({
             onClick={goNext}
             disabled={activeIndex === items.length - 1}
             aria-label="Próximo prato"
-            className="grid size-12 place-items-center rounded-full bg-khao-white text-khao-black transition-colors duration-300 hover:bg-khao-gold disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-13"
+            className="grid size-12 place-items-center rounded-full bg-khao-white text-khao-black transition-colors duration-300 hover:bg-khao-gold disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-khao-gold sm:size-10"
           >
             <ArrowRight size={21} strokeWidth={1.3} />
           </button>

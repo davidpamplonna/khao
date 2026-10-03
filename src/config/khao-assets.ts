@@ -68,7 +68,7 @@ export const KHAO_ASSETS = {
     Couple_sharing_Thai_dishes3:
       "/assets/gallery/Couple_sharing_Thai_dishes.webp",
     Woman_taking_mirror_selfie:
-      "/assets/gallery/woman_taking_mirror_selfie.webp",
+      "/assets/gallery/Woman_taking_mirror_selfie.webp",
     Hand_holding_Thai_iced_tea:
       "/assets/gallery/Hand_holding_Thai_iced_tea.webp",
     Friends_clinking_cocktail_glassesa:
@@ -103,6 +103,7 @@ export const KHAO_ICONS = {
 export const KHAO_VIDEOS = {
   hero: "/videos/intro-khao-chef.mp4",
   experience: "/videos/clip-wok-fire.mp4",
+  
   menu: {
     starters:{
       video:"/videos/dishes.mp4",
