@@ -19,7 +19,9 @@ export function Hero() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLDivElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const descriptionParallaxRef = useRef<HTMLSpanElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
+  const actionsParallaxRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -201,7 +203,7 @@ export function Hero() {
           0,
         )
         .to(
-          [descriptionRef.current, actionsRef.current],
+          [descriptionParallaxRef.current, actionsParallaxRef.current],
           {
             yPercent: -20,
             autoAlpha: 0,
@@ -387,8 +389,10 @@ export function Hero() {
             md:text-[16px]
           "
         >
-          Sabores intensos, técnicas ancestrais e uma interpretação
-          contemporânea da cozinha tailandesa.
+          <span ref={descriptionParallaxRef} className="block">
+            Sabores intensos, técnicas ancestrais e uma interpretação
+            contemporânea da cozinha tailandesa.
+          </span>
         </p>
 
         {/* ACTIONS */}
@@ -396,23 +400,31 @@ export function Hero() {
         <div
           ref={actionsRef}
           className="
-            flex
             w-75
-            flex-col
-            items-stretch
-            gap-3
             sm:w-auto
-            sm:flex-row
-            sm:items-center
           "
         >
-          <Button type="button" variant="primary" href="#cardapio">
-            Explorar o menu
-          </Button>
+          <div
+            ref={actionsParallaxRef}
+            className="
+              flex
+              w-75
+              flex-col
+              items-stretch
+              gap-3
+              sm:w-auto
+              sm:flex-row
+              sm:items-center
+            "
+          >
+            <Button type="button" variant="primary" href="#cardapio">
+              Explorar o menu
+            </Button>
 
-          <ReservationButton variant="secondary">
-            Reserve uma mesa
-          </ReservationButton>
+            <ReservationButton variant="secondary">
+              Reserve uma mesa
+            </ReservationButton>
+          </div>
         </div>
       </div>
 
