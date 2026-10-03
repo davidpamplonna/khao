@@ -37,8 +37,8 @@ const HEADER_CONTAINER_CLASSES = `
   justify-between
   px-3
   py-5
-  md:px-10
-  md:py-7
+  md:px-12
+  md:py-5
 `;
 
 const LOGO_CLASSES = `
