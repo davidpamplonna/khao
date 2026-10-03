@@ -121,32 +121,37 @@ export function NavBar() {
             data-lenis-prevent-wheel
             data-lenis-prevent-touch
             className={`
-            fixed inset-0 z-60 overflow-y-auto overscroll-contain touch-pan-y bg-khao-black/80 backdrop-blur-md transition-[opacity,visibility] duration-300
-                ${isOpenMenu ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}
+              fixed inset-0 z-60 overflow-y-auto overscroll-contain touch-pan-y
+              bg-khao-black/80 backdrop-blur-md
+              transition-[opacity,visibility] duration-500
+              ease-[cubic-bezier(0.22,1,0.36,1)]
+              motion-reduce:transition-none
+              ${isOpenMenu ? "visible opacity-100" : "invisible pointer-events-none opacity-0"}`}
           >
             {/* buttom close */}
-            <div className="container mx-auto flex w-full items-center justify-between px-3 py-5 sm:px-10">
-              {/* <Logo /> */}
-              <Logo
-                className="
+            <div className="container mx-auto flex w-full items-center justify-between px-3 py-5  md:px-12
+  md:py-5">
+                {/* <Logo /> */}
+                <Logo
+                  className="
        h-auto
           w-40
           max-md:w-65
           max-sm:w-30"
-              />
-              <button
-                ref={closeButtonRef}
-                onClick={() => setIsOpenMenu(false)}
-                aria-label="Fechar menu"
-                type="button"
-                className="flex gap-3 items-center text-khao-white transition-colors hover:text-khao-gold"
-              >
-                Fechar
-                <X aria-hidden="true" />
-              </button>
-            </div>
-            {/* conteiner navegation */}
-            <div className="container mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col px-8 py-8 sm:px-12">
+                />
+                <button
+                  ref={closeButtonRef}
+                  onClick={() => setIsOpenMenu(false)}
+                  aria-label="Fechar menu"
+                  type="button"
+                  className="flex gap-3 items-center text-khao-white transition-colors hover:text-khao-gold"
+                >
+                  Fechar
+                  <X aria-hidden="true" />
+                </button>
+              </div>
+              {/* conteiner navegation */}
+              <div className="container mx-auto flex min-h-[calc(100dvh-100px)] w-full flex-col px-8 py-8 sm:px-12">
               <div className="grid flex-1 grid-cols-1 md:grid-cols-2 md:gap-12">
                 <nav className="flex flex-col justify-center gap-8">
                   <span className="text-khao-gold block uppercase text-xs tracking-[0.4em]">
