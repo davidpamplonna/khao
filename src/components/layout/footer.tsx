@@ -7,6 +7,7 @@ import { KHAO_ICONS } from "@/src/config/khao-assets";
 
 const FOOTER_LINKS = {
   navigation: [
+    { label: "Cardápio", href: "#cardapio" },
     { label: "Experiência", href: "#experiencia" },
     { label: "Reservas", href: "#reservas" },
     { label: "Contato", href: "#contato" },
