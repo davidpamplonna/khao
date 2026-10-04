@@ -1,111 +1,35 @@
-# KHAO
+<div align="center">
+  <h1>🍜 Restobar KHAO</h1>
+  <p><strong>A essência da Tailândia, em uma experiência contemporânea.</strong></p>
+  <p>
+    <a href="https://khao-six.vercel.app/">Visite o site ↗</a>
+  </p>
+  <p>
+    <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white" />
+    <img alt="React" src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white" />
+    <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" />
+    <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" />
+  </p>
+</div>
 
-Landing page do Restobar KHAO, com foco em cozinha tailandesa contemporânea, narrativa visual, cardápio interativo e apresentação da experiência do restaurante.
+## Sobre o projeto
 
-## Stack
+O KHAO é a landing page do Restobar KHAO, criada para apresentar a identidade do restaurante e convidar o público a conhecer sua cozinha tailandesa contemporânea. A direção visual combina imagens marcantes, tipografia editorial e animações sutis para levar a atmosfera do espaço até a experiência digital.
 
-- Next.js `16.3.5`
-- React `19.2.8`
-- TypeScript
-- Tailwind CSS `4`
-- GSAP e ScrollTrigger para animações
-- Lenis para rolagem suave
-- Swiper para a galeria
-- `next/image` para otimização de imagens
+## Objetivo
 
-## Requisitos
+Mais do que exibir informações, o site conduz o visitante por uma apresentação envolvente do restaurante: sua essência, a experiência à mesa, os pratos e combos em destaque e os caminhos para dar o próximo passo. O conteúdo foi organizado para despertar curiosidade, facilitar a descoberta do cardápio e aproximar novos clientes da marca.
 
-- Node.js compatível com a versão usada pelo Next.js 16
-- npm
+## Tecnologias
 
-## Instalação
+- **Next.js 16** e **React 19** para a aplicação e seus componentes.
+- **TypeScript** para tipagem e desenvolvimento mais seguro.
+- **Tailwind CSS 4** para a construção dos estilos.
+- **GSAP** para animações e transições visuais.
+- **Lenis** para rolagem suave.
+- **Swiper** para a experiência de galeria.
+- **Lucide React** para ícones.
 
-```bash
-npm install
-```
-
-## Desenvolvimento
-
-```bash
-npm run dev
-```
-
-Depois, abra `http://localhost:3000`.
-
-## Scripts
-
-| Comando         | Uso                                                                                                    |
-| --------------- | ------------------------------------------------------------------------------------------------------ |
-| `npm run dev`   | Inicia o servidor de desenvolvimento.                                                                  |
-| `npm run build` | Gera a build de produção e verifica a compilação.                                                      |
-| `npm run start` | Inicia a aplicação em modo de produção após o build.                                                   |
-| `npm run lint`  | Executa o ESLint.                                                                                      |
-| `npm run clean` | Remove a pasta `.next` em ambientes Unix. No Windows, remova essa pasta manualmente ou use PowerShell. |
-
-Antes de abrir um pull request, execute:
-
-```bash
-npm run lint
-npx tsc --noEmit
-npm run build
-```
-
-## Estrutura principal
-
-```text
-src/
-	app/                 Layout e página principal do App Router
-	components/
-		layout/            Header, navegação e rodapé
-		sections/          Hero, essência, experiência, menu, combos e CTA
-		ui/                Componentes reutilizáveis, título, botão e galeria
-	data/
-		assets/            Caminhos centralizados para imagens, vídeos e ícones
-		menu.ts            Categorias e pratos exibidos no cardápio
-		combo.ts           Combos exibidos na página
-	motion/              Lenis e controle de bloqueio da rolagem
-	styles/              Tokens, tipografia e estilos globais
-	types/               Tipos de menu e combos
-public/
-	assets/              Imagens, ícones e vídeos usados pela página
-```
-
-## Onde alterar o conteúdo
-
-### Cardápio
-
-Edite [src/data/menu.ts](src/data/menu.ts). Cada categoria possui `id`, `number`, `label` e uma lista de pratos. Cada prato precisa de `id` único, nome, descrição, imagem existente e `alt` descritivo.
-
-Os tipos correspondentes estão em [src/types/menu.ts](src/types/menu.ts).
-
-### Combos
-
-Edite [src/data/combo.ts](src/data/combo.ts). As imagens devem ser registradas em [src/data/assets/image.ts](src/data/assets/image.ts) e armazenadas em `public/assets/combos/`.
-
-### Imagens e vídeos
-
-Os caminhos públicos ficam centralizados em [src/data/assets/image.ts](src/data/assets/image.ts) e [src/data/assets/video.ts](src/data/assets/video.ts). Coloque novos arquivos na pasta adequada dentro de `public/assets/` ou `public/videos/` e atualize o mapa correspondente.
-
-### Dados do restaurante
-
-Endereço, horários, redes sociais e links de navegação ainda precisam ser conferidos antes da publicação. Hoje eles aparecem principalmente em [src/components/layout/footer.tsx](src/components/layout/footer.tsx), [src/components/layout/navbar.tsx](src/components/layout/navbar.tsx) e [src/data/assets/menu.ts](src/data/assets/menu.ts).
-
-Consulte [ajuste.md](ajuste.md) para o plano detalhado de correção.
-
-## Arquitetura da página
-
-A página inicial é montada em [src/app/page.tsx](src/app/page.tsx), nesta ordem: Header, Hero, Essência, Experiência, Cardápio, Combos, CTA, Galeria e Footer.
-
-As seções são componentes client-side quando dependem de GSAP, Swiper, estado ou eventos do navegador. O layout global configura fontes, metadados, idioma e rolagem suave em [src/app/layout.tsx](src/app/layout.tsx).
-
-## Animações e acessibilidade
-
-As animações usam GSAP e algumas seções já verificam `prefers-reduced-motion`. Toda nova animação deve manter o conteúdo acessível quando o usuário solicitar menos movimento. Elementos modais, menus e galerias também precisam controlar foco, oferecer fechamento pelo teclado e indicar seu estado com ARIA.
-
-## Assets e performance
-
-Os vídeos e imagens fazem parte importante da experiência visual, mas aumentam o carregamento inicial. Antes de publicar, comprima imagens e prefira AVIF ou WebP, use poster nos vídeos, evite carregar vídeos fora da viewport sem necessidade e teste a página em rede móvel e em dispositivos de baixo desempenho.
-
-## Estado atual
-
-O projeto compila e possui lint configurado. O formulário visual de reserva já está integrado ao Hero e à CTA final, com validação nativa e confirmação para o e-mail informado. Ainda é necessário conectar o envio real dessa confirmação a um backend ou serviço de e-mail, além de revisar destinos de navegação, dados reais do restaurante, acessibilidade do menu mobile e lightbox. O documento [ajuste.md](ajuste.md) lista cada pendência, o arquivo responsável e a forma recomendada de implementação.
+<div align="center">
+  <sub>Feito para apresentar o sabor e a personalidade do KHAO também no digital.</sub>
+</div>
